@@ -48,17 +48,11 @@ public class PlayerController : MonoBehaviour
         //Vecteur de translation avec les inputs
         Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
 
-
-        //Déplacement sans prendre en compte la caméra
-        //m_Rigidbody.AddForce(movement * m_Speed * Time.fixedDeltaTime, ForceMode.VelocityChange);
-        //m_Rigidbody.AddForce(-movement/2 * m_Speed * Time.fixedDeltaTime, ForceMode.VelocityChange);
-        
-
-
-        
-        //Pour que la balle se déplace selon la position de la caméra
-        //Vector3 controlDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        //Peut etre mis en commentaire pour changer le style
         var actualDirection = camera.TransformDirection(movement);
+
+
+
         m_Rigidbody.AddForce(actualDirection * m_Speed * Time.fixedDeltaTime, ForceMode.VelocityChange);
 
 
@@ -66,18 +60,12 @@ public class PlayerController : MonoBehaviour
         if (Is_Jumped && m_OnGround)
         {
             Debug.Log("Saut");
-            //Vector3 dirJump = new Vector3(0, actualDirection.y, 0);
-            //Debug.Log("Vect : " + dirJump.ToString());
             m_Rigidbody.AddForce(Vector3.up *m_Jump* Time.fixedDeltaTime, ForceMode.Impulse);
             m_OnGround = false;
             
         }
-        //if (transform.position.y == 0.5)
-          //  m_OnGround = true;
         
-
-
-    }
+     }
 
     private void OnCollisionStay(Collision collision)
     {
