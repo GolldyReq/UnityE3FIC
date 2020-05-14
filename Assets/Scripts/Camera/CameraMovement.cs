@@ -5,15 +5,15 @@ using UnityEngine;
 public class CameraMovement : MonoBehaviour
 {
 
-    Transform targetCamera;
+    [SerializeField] Transform targetCamera;
     Vector3 to;
-    Transform targetCharacter;
+    [SerializeField] Transform targetCharacter;
 
     // Start is called before the first frame update
     void Start()
     {
-        targetCamera = GameObject.Find("Target").transform;
-        targetCharacter = GameObject.Find("Sphere").transform;
+        //targetCamera = GameObject.Find("Target").transform;
+        //targetCharacter = GameObject.Find("Sphere").transform;
     }
 
     // Update is called once per frame

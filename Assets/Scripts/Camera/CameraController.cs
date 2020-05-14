@@ -7,8 +7,11 @@ public class CameraController : MonoBehaviour
     [SerializeField] Transform target;
     Vector3 offsetCamera;
 
-    [Range(0.01f, 1.0f)]
-    [SerializeField] float smooth;
+    [SerializeField] float m_Distance;
+
+    [Range(1, 200)]
+    [SerializeField] float m_Sensibility;
+
     void Start()
     {
         offsetCamera = transform.position - target.position;
@@ -16,24 +19,26 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-
-
-        //transform.Rotate(0, transform.rotation.y, 0);
-
         
-        Vector3 cameraPosition = target.position + offsetCamera;
-        Vector3 smoothPosition = Vector3.Lerp(transform.position, cameraPosition, smooth);
-        //transform.position = smoothPosition;
-        //transform.LookAt(target);
-        
+    }
+
+
+    private void FixedUpdate()
+    {
         float Hcamera = Input.GetAxis("R_Horizontal");
-        Debug.Log("Value axis : " + Hcamera);
-        //transform.position = new Vector3(cameraPosition.x, cameraPosition.y, cameraPosition.z);
-        //transform.RotateAround(target.position,Vector3.up, Hcamera*30*Time.deltaTime );
-        Debug.Log(target.position.ToString());
-        
+
+        transform.RotateAround(target.position, Vector3.up, Hcamera * m_Sensibility * Time.deltaTime);
+        Vector3 norme = transform.position - target.transform.position;
+        if (norme.y != 1.5f)
+            norme.y = 1.5f;
+        transform.position = norme.normalized * m_Distance + target.transform.position;
         //transform.LookAt(target);
 
+        Vector3 targetPostition = new Vector3(target.position.x,
+                                       this.transform.position.y,
+                                       target.position.z);
+        this.transform.LookAt(targetPostition);
 
+        //transform.position = new Vector3(transform.position.x, 1.5f + target.position.y, transform.position.z);
     }
 }
