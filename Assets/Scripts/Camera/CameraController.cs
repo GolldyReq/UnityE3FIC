@@ -19,17 +19,13 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.Escape))
-            Cursor.lockState = CursorLockMode.None;
-        else
-            Cursor.lockState = CursorLockMode.Locked;
+        
     }
 
 
     private void FixedUpdate()
     {
         float Hcamera = Input.GetAxis("R_Horizontal");
-
         transform.RotateAround(target.position, Vector3.up, Hcamera * m_Sensibility * Time.deltaTime);
         Vector3 norme = transform.position - target.transform.position;
         if (norme.y != 1.5f)

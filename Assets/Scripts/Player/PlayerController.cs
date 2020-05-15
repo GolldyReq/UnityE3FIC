@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float m_Jump;
 
     private bool m_OnGround;
+    private float m_JumpCooldown;
+    private float m_NextJump;
 
 
 
@@ -30,6 +32,8 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         m_OnGround = true;
+        m_JumpCooldown = 0.25f;
+        m_NextJump = Time.time;
     }
 
     // Update is called once per frame
@@ -47,6 +51,7 @@ public class PlayerController : MonoBehaviour
 
         //Vecteur de translation avec les inputs
         Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
+        Vector3.ClampMagnitude(movement, 1);
 
         //Peut etre mis en commentaire pour changer le style
         var actualDirection = camera.TransformDirection(movement);
@@ -61,16 +66,28 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("Saut");
             m_Rigidbody.AddForce(Vector3.up *m_Jump* Time.fixedDeltaTime, ForceMode.Impulse);
-            m_OnGround = false;
-            
+            //m_OnGround = false;
+            m_NextJump = Time.time + m_JumpCooldown;
+
         }
         
      }
 
     private void OnCollisionStay(Collision collision)
     {
+        
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
         if (collision.gameObject.CompareTag("Plateforme") || collision.gameObject.CompareTag("Decor"))
             m_OnGround = true;
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Plateforme") || collision.gameObject.CompareTag("Decor"))
+            m_OnGround = false;
     }
 
 
