@@ -40,7 +40,16 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        m_Rigidbody.transform.localScale = new Vector3(1f, 1f, 1f);
+
+        if (Input.GetButton("Fire1"))
+            m_Rigidbody.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+        if (Input.GetButton("Fire2"))
+            m_Rigidbody.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+        if (Input.GetKey("joystick button 4"))
+            m_Rigidbody.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+        if (Input.GetKey("joystick button 5"))
+            m_Rigidbody.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
     }
 
     private void FixedUpdate()
@@ -68,7 +77,7 @@ public class PlayerController : MonoBehaviour
         m_Rigidbody.AddForce(actualDirection * m_Speed * Time.fixedDeltaTime, ForceMode.VelocityChange);
 
 
-        bool Is_Jumped = Input.GetButton("Fire1");
+        bool Is_Jumped = Input.GetButton("Jump");
         if (Is_Jumped && m_OnGround && Time.time > m_NextJump)
         {
             Debug.Log("Saut");
