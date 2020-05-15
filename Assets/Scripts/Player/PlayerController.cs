@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviour
             m_Size = "Small";
         }
         if (Input.GetKey("joystick button 5"))
-            m_Rigidbody.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+            m_Rigidbody.transform.localScale = new Vector3(2f, 2f, 2f);
     }
 
     private void FixedUpdate()
@@ -99,7 +99,16 @@ public class PlayerController : MonoBehaviour
             m_OnGround = false;
     }
     
-
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Killable"))
+        {
+            Debug.Log(other.name);
+            Debug.Log("Mort du perso");
+            Destroy(gameObject);
+            Destroy(GameObject.Find("camera"));
+        }
+    }
 
 
 }

@@ -28,13 +28,21 @@ public class CameraController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        float Hcamera = Input.GetAxis("R_Horizontal");
-        transform.RotateAround(target.position, Vector3.up, Hcamera * m_Sensibility * Time.deltaTime);
-        Vector3 norme = transform.position - target.transform.position;
-        if (norme.y != 1.5f)
-            norme.y = 1.5f;
-        transform.position = norme.normalized * m_Distance + target.transform.position;
-        transform.LookAt(target);
-        //transform.position = new Vector3(transform.position.x, 1.5f + target.position.y, transform.position.z);
+        if (target == null)
+        {
+            transform.position = new Vector3(0, 0, 0);
+        }
+        else
+        {
+            float Hcamera = Input.GetAxis("R_Horizontal");
+            transform.RotateAround(target.position, Vector3.up, Hcamera * m_Sensibility * Time.deltaTime);
+            Vector3 norme = transform.position - target.transform.position;
+            if (norme.y != 1.5f)
+                norme.y = 1.5f;
+            transform.position = norme.normalized * m_Distance + target.transform.position;
+            transform.LookAt(target);
+            //transform.position = new Vector3(transform.position.x, 1.5f + target.position.y, transform.position.z);
+
+        }
     }
 }
