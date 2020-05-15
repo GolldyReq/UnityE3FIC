@@ -19,7 +19,10 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        
+        if (Input.GetKey(KeyCode.Escape))
+            Cursor.lockState = CursorLockMode.None;
+        else
+            Cursor.lockState = CursorLockMode.Locked;
     }
 
 

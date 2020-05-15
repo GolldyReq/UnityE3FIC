@@ -18,10 +18,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float m_Jump;
 
     private bool m_OnGround;
-    private float m_JumpCooldown;
+    [SerializeField] float m_JumpCooldown;
     private float m_NextJump;
 
-
+    private bool gtp;
 
     private void Awake()
     {
@@ -31,8 +31,9 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gtp = false;
         m_OnGround = true;
-        m_JumpCooldown = 0.25f;
+        //m_JumpCooldown = 1f;
         m_NextJump = Time.time;
     }
 
@@ -45,13 +46,19 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
 
+        if(Time.time>m_NextJump && gtp==false)
+        {
+            Debug.Log("Vous pouvez sauter");
+            gtp = true;
+        }
+
         float moveHorizontal = Input.GetAxis("Horizontal");
 		float moveVertical = Input.GetAxis("Vertical");
 
 
         //Vecteur de translation avec les inputs
         Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
-        Vector3.ClampMagnitude(movement, 1);
+        movement = Vector3.ClampMagnitude(movement, 1);
 
         //Peut etre mis en commentaire pour changer le style
         var actualDirection = camera.TransformDirection(movement);
@@ -62,22 +69,28 @@ public class PlayerController : MonoBehaviour
 
 
         bool Is_Jumped = Input.GetButton("Fire1");
-        if (Is_Jumped && m_OnGround)
+        if (Is_Jumped && m_OnGround && Time.time > m_NextJump)
         {
             Debug.Log("Saut");
             m_Rigidbody.AddForce(Vector3.up *m_Jump* Time.fixedDeltaTime, ForceMode.Impulse);
-            //m_OnGround = false;
+            //m_Rigidbody.AddForce(Vector3.up *m_Jump* Time.fixedDeltaTime, ForceMode.VelocityChange);
+            m_OnGround = false;
+            gtp = false;
             m_NextJump = Time.time + m_JumpCooldown;
 
         }
         
      }
-
+    
+    
     private void OnCollisionStay(Collision collision)
     {
-        
+        if (collision.gameObject.CompareTag("Plateforme") || collision.gameObject.CompareTag("Decor"))
+            m_OnGround = true;
     }
-
+    
+    
+    
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Plateforme") || collision.gameObject.CompareTag("Decor"))
@@ -89,6 +102,7 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("Plateforme") || collision.gameObject.CompareTag("Decor"))
             m_OnGround = false;
     }
+    
 
 
 
