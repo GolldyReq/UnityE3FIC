@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LeftRightMove : MonoBehaviour
+public class LeftRightMoveZ : MonoBehaviour
 {
 
     [Range(-1,1)]

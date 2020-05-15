@@ -21,7 +21,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float m_JumpCooldown;
     private float m_NextJump;
 
-    private bool gtp;
+    private string m_Size;
+
 
     private void Awake()
     {
@@ -33,19 +34,19 @@ public class PlayerController : MonoBehaviour
     {
         m_OnGround = true;
         m_NextJump = Time.time;
+        m_Size = "Normal";
     }
 
     // Update is called once per frame
     void Update()
     {
+        //Changement de taille avec L1/R1
         m_Rigidbody.transform.localScale = new Vector3(1f, 1f, 1f);
-
-        if (Input.GetButton("Fire1"))
-            m_Rigidbody.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
-        if (Input.GetButton("Fire2"))
-            m_Rigidbody.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
         if (Input.GetKey("joystick button 4"))
+        {
             m_Rigidbody.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+            m_Size = "Small";
+        }
         if (Input.GetKey("joystick button 5"))
             m_Rigidbody.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
     }
@@ -53,7 +54,7 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
 
-
+        //Recuperation valeur Joystick
         float moveHorizontal = Input.GetAxis("Horizontal");
 		float moveVertical = Input.GetAxis("Vertical");
 
@@ -61,30 +62,25 @@ public class PlayerController : MonoBehaviour
         //Vecteur de translation avec les inputs
         Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
         movement = Vector3.ClampMagnitude(movement, 1);
-
         //Peut etre mis en commentaire pour changer le style
         var actualDirection = camera.TransformDirection(movement);
 
-
-
         m_Rigidbody.AddForce(actualDirection * m_Speed * Time.fixedDeltaTime, ForceMode.VelocityChange);
 
-
-        bool Is_Jumped = Input.GetButton("Jump");
+        //Faire sauter le joueur
+        bool Is_Jumped = Input.GetButton("Fire1");
         if (Is_Jumped && m_OnGround && Time.time > m_NextJump)
         {
             Debug.Log("Saut");
             m_Rigidbody.AddForce(Vector3.up *m_Jump* Time.fixedDeltaTime, ForceMode.Impulse);
             //m_Rigidbody.AddForce(Vector3.up *m_Jump* Time.fixedDeltaTime, ForceMode.VelocityChange);
             m_OnGround = false;
-            gtp = false;
             m_NextJump = Time.time + m_JumpCooldown;
-
         }
         
      }
     
-    
+    //Gestion des collisions
     private void OnCollisionStay(Collision collision)
     {
         if (collision.gameObject.CompareTag("Plateforme") || collision.gameObject.CompareTag("Decor"))
