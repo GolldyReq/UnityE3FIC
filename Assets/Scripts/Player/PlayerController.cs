@@ -31,9 +31,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        gtp = false;
         m_OnGround = true;
-        //m_JumpCooldown = 1f;
         m_NextJump = Time.time;
     }
 
@@ -55,11 +53,6 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
 
-        if(Time.time>m_NextJump && gtp==false)
-        {
-            Debug.Log("Vous pouvez sauter");
-            gtp = true;
-        }
 
         float moveHorizontal = Input.GetAxis("Horizontal");
 		float moveVertical = Input.GetAxis("Vertical");
@@ -97,8 +90,6 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("Plateforme") || collision.gameObject.CompareTag("Decor"))
             m_OnGround = true;
     }
-    
-    
     
     private void OnCollisionEnter(Collision collision)
     {

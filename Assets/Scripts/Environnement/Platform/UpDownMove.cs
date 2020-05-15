@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LeftRightMove : MonoBehaviour
+public class UpDownMove : MonoBehaviour
 {
-
-    [Range(-1,1)]
+    [Range(-1, 1)]
     [SerializeField] int m_Direction;
 
-    [Range(0 , 5)]
+    [Range(0, 5)]
     [SerializeField] int m_Speed;
 
     [Range(0, 10)]
@@ -16,7 +15,7 @@ public class LeftRightMove : MonoBehaviour
 
     private Vector3 m_BasePosition;
 
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -27,9 +26,9 @@ public class LeftRightMove : MonoBehaviour
     void Update()
     {
 
-        Vector3 move = Vector3.forward * m_Direction * m_Speed * Time.deltaTime;
-        transform.Translate( move , Space.Self );
-        if (transform.position.z > (m_BasePosition.z + m_Distance) || transform.position.z < (m_BasePosition.z - m_Distance))
+        Vector3 move = Vector3.up * m_Direction * m_Speed * Time.deltaTime;
+        transform.Translate(move, Space.Self);
+        if (transform.position.y > (m_BasePosition.y + m_Distance) || transform.position.y < (m_BasePosition.y - m_Distance))
             m_Direction = m_Direction * (-1);
 
     }
