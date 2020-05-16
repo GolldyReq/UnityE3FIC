@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour,IColorable
 {
-    [Tooltip("La vitesse en m.s-1")]
-    [SerializeField] float m_Speed;
-
-
 
     Rigidbody m_Rigidbody;
 
-    [SerializeField] Transform camera;
+    [Tooltip("La vitesse en m.s-1")]
+    [SerializeField] float m_Speed;
 
+    [SerializeField] Transform camera;
 
     [Header("Puissance du saut")]
     [SerializeField] float m_Jump;
@@ -21,15 +19,13 @@ public class PlayerController : MonoBehaviour,IColorable
     [SerializeField] float m_JumpCooldown;
     private float m_NextJump;
 
+    private float m_SizeChangeCoolDown;
+    private float m_NextSizeChange;
+
     private string m_Size;
     private string m_Color;
     private int m_Mass;
-
-    private MeshRenderer m_PrimaryColor;
-    private Material m_SecondaryColor;
-
-
-
+    
     private void Awake()
     {
         m_Rigidbody = GetComponentInChildren<Rigidbody>();
@@ -40,6 +36,10 @@ public class PlayerController : MonoBehaviour,IColorable
     {
         m_OnGround = true;
         m_NextJump = Time.time;
+
+        m_SizeChangeCoolDown = 0.1f;
+        m_NextSizeChange = Time.time;
+
         m_Size = "Normal";
         m_Color = "White";
         m_Mass = 0;
@@ -48,35 +48,64 @@ public class PlayerController : MonoBehaviour,IColorable
     // Update is called once per frame
     void Update()
     {
-        //Changement de taille avec L1/R1
-        m_Rigidbody.transform.localScale = new Vector3(1f, 1f, 1f);
-        if (Input.GetKey("joystick button 4"))
-        {
-            m_Rigidbody.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-            m_Size = "Small";
-        }
-        if (Input.GetKey("joystick button 5"))
-            m_Rigidbody.transform.localScale = new Vector3(2f, 2f, 2f);
+       
     }
 
     private void FixedUpdate()
     {
-
+        //Mouvement
         //Recuperation valeur Joystick
         float moveHorizontal = Input.GetAxis("Horizontal");
 		float moveVertical = Input.GetAxis("Vertical");
-
 
         //Vecteur de translation avec les inputs
         Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
         movement = Vector3.ClampMagnitude(movement, 1);
         //Peut etre mis en commentaire pour changer le style
         var actualDirection = camera.TransformDirection(movement);
-
         m_Rigidbody.AddForce(actualDirection * m_Speed * Time.fixedDeltaTime, ForceMode.VelocityChange);
 
+
+        //Changement de taille
+        //Savoir s'il est possible de changer de taille
+        RaycastHit hit;
+        float taille_agrandissement = 1.2f;
+        bool IsPossibleToGrowUp = true;
+        if (m_Size == "Small")
+            taille_agrandissement = 2.7f;
+        
+        //On verifie que le grandissement ne provoque pas de collision       
+        //Verifier si le centre de la sphére va toucher 
+        //if (Physics.Raycast(transform.position, Vector3.up, out hit, taille_agrandissement))
+        if ( Physics.SphereCast(transform.position,0.1f, Vector3.up, out hit , taille_agrandissement))
+        {
+            //Debug.DrawRay(transform.position, Vector3.up * hit.distance, Color.red);
+            IsPossibleToGrowUp = false;
+            m_NextSizeChange = Time.time + m_SizeChangeCoolDown;
+        }
+
+        //Changement de taille avec L1/R1 si cela est possible
+        if (IsPossibleToGrowUp && Time.time > m_NextSizeChange)
+        {
+            m_Rigidbody.transform.localScale = new Vector3(1f, 1f, 1f);
+            m_Size = "Normal";
+        }
+
+        if (Input.GetButton("Small"))
+        {
+            m_Rigidbody.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+            m_Size = "Small";
+        }
+        
+        if (Input.GetButton("Big") && IsPossibleToGrowUp && Time.time > m_NextSizeChange)
+        {
+            m_Rigidbody.transform.localScale = new Vector3(2f, 2f, 2f);
+            m_Size = "Big";
+        }
+
+        //Saut
         //Faire sauter le joueur
-        bool Is_Jumped = Input.GetButton("Fire1");
+        bool Is_Jumped = Input.GetButton("Saut");
         if (Is_Jumped && m_OnGround && Time.time > m_NextJump)
         {
             Debug.Log("Saut");
@@ -85,7 +114,14 @@ public class PlayerController : MonoBehaviour,IColorable
             m_OnGround = false;
             m_NextJump = Time.time + m_JumpCooldown;
         }
+
+        //fusion couleur
+        if(Input.GetButton("Fusion"))
+        {
+            FusionColor();
+        }
         
+
      }
     
     //Gestion des collisions
@@ -106,7 +142,7 @@ public class PlayerController : MonoBehaviour,IColorable
         if (collision.gameObject.CompareTag("Plateforme") || collision.gameObject.CompareTag("Decor"))
             m_OnGround = false;
     }
-    
+
 
     //Entrée dans un trigger
     private void OnTriggerEnter(Collider other)
@@ -117,17 +153,18 @@ public class PlayerController : MonoBehaviour,IColorable
         {
             Debug.Log(other.name);
             Debug.Log("Mort du perso");
+            /*
             Destroy(gameObject);
             Destroy(GameObject.Find("camera"));
+            */
+            transform.position = new Vector3(0, 1, -23);
+
         }
 
-        if( other.gameObject.CompareTag("Paint"))
+        if (other.gameObject.CompareTag("Paint"))
         {
-            Debug.Log("Paint");
             Paint(other.GetComponent<MeshRenderer>());
         }
-
-
     }
 
     public void Paint(MeshRenderer newMaterial)
@@ -135,17 +172,59 @@ public class PlayerController : MonoBehaviour,IColorable
         MeshRenderer mr = GetComponentInChildren<MeshRenderer>();
         if (mr)
         {
-            int x = mr.materials.Length;
-            Debug.Log("number of materal : " + x);
             Material[] ListMaterial = mr.materials;
-            Debug.Log(ListMaterial[1].name);
-            ListMaterial[1].color = newMaterial.material.color;
-            mr.materials = ListMaterial;
             
-            //mr.material.color = Color.blue;
-            //mr.material.color = newMaterial.material.color;
-            //mr.material.mainTexture = newMaterial.material.mainTexture;
+            //changement premiere couleur
+            if (newMaterial.material.name[0]=='L')
+                ListMaterial[0] = newMaterial.material;
+            //Changement seconde couleur
+            if (newMaterial.material.name[0]=='R')
+                ListMaterial[1] = newMaterial.material;
+            //Changement 2 couleurs 
+            if (newMaterial.material.name[0] == 'F' )
+            {
+                ListMaterial[0] = newMaterial.material;
+                ListMaterial[1] = newMaterial.material;
+            }
+            mr.materials = ListMaterial;
+        }
+    }
 
+    public void FusionColor()
+    {
+        MeshRenderer mr = GetComponentInChildren<MeshRenderer>();
+        if(mr)
+        {
+            Material[] ListMaterial = mr.materials;
+            bool green=false, red=false, blue = false;
+
+            if (ListMaterial[0].name.Contains("Lblue") || ListMaterial[1].name.Contains("Rblue"))
+                blue = true ;
+            if (ListMaterial[0].name.Contains("Lgreen") || ListMaterial[1].name.Contains("Rgreen"))
+                green= true ;
+            if (ListMaterial[0].name.Contains("Lred") || ListMaterial[1].name.Contains("Rred"))
+                red = true ;
+
+            //Debug.Log(color);
+
+            Debug.Log(ListMaterial[0].name + " + " + ListMaterial[1].name);
+            if (blue && red)
+            {
+                ListMaterial[0] = (Material) Resources.Load("Materials/Paint/Lviolet", typeof(Material));
+                ListMaterial[1] = (Material) Resources.Load("Materials/Paint/Rviolet", typeof(Material));
+            }
+            if (blue && green)
+            {
+                ListMaterial[0] = (Material)Resources.Load("Materials/Paint/Lciel", typeof(Material));
+                ListMaterial[1] = (Material)Resources.Load("Materials/Paint/Rciel", typeof(Material));
+            }
+            if (green && red)
+            {
+                ListMaterial[0] = (Material)Resources.Load("Materials/Paint/Ljaune", typeof(Material));
+                ListMaterial[1] = (Material)Resources.Load("Materials/Paint/Rjaune", typeof(Material));
+            }
+
+            mr.materials = ListMaterial;
         }
     }
 }

@@ -3,7 +3,16 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Shootable
+  - Decor
+  - Plateforme
+  - Fire
+  - Killable
+  - Bonus
+  - Cle
+  - NoJump
+  - Paint
   layers:
   - Default
   - TransparentFX
@@ -13,10 +22,10 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
-  - 
+  - Lighting
+  - Ground
+  - Postprocessing
+  - transparent
   - 
   - 
   - 
@@ -38,6 +47,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Fire
+    uniqueID: 3804908061
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
