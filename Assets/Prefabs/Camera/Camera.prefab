@@ -99,3 +99,4 @@ MonoBehaviour:
   target: {fileID: 0}
   m_Distance: 4
   m_Sensibility: 180
+  m_height: 1.5

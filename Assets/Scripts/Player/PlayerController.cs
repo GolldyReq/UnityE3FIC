@@ -21,6 +21,8 @@ public class PlayerController : MonoBehaviour,IColorable
 
     private float m_SizeChangeCoolDown;
     private float m_NextSizeChange;
+    private bool m_CoroutineSizeFinish;
+
 
     private string m_Size;
     private string m_Color;
@@ -37,8 +39,9 @@ public class PlayerController : MonoBehaviour,IColorable
         m_OnGround = true;
         m_NextJump = Time.time;
 
-        m_SizeChangeCoolDown = 0.1f;
+        m_SizeChangeCoolDown = 0.5f;
         m_NextSizeChange = Time.time;
+        m_CoroutineSizeFinish = true;
 
         m_Size = "Normal";
         m_Color = "White";
@@ -65,7 +68,7 @@ public class PlayerController : MonoBehaviour,IColorable
         var actualDirection = camera.TransformDirection(movement);
         m_Rigidbody.AddForce(actualDirection * m_Speed * Time.fixedDeltaTime, ForceMode.VelocityChange);
 
-
+        
         //Changement de taille
         //Savoir s'il est possible de changer de taille
         RaycastHit hit;
@@ -85,23 +88,30 @@ public class PlayerController : MonoBehaviour,IColorable
         }
 
         //Changement de taille avec L1/R1 si cela est possible
-        if (IsPossibleToGrowUp && Time.time > m_NextSizeChange)
+        if (Time.time > m_NextSizeChange && m_CoroutineSizeFinish)
         {
-            m_Rigidbody.transform.localScale = new Vector3(1f, 1f, 1f);
-            m_Size = "Normal";
-        }
+            if (IsPossibleToGrowUp && m_Size != "Normal")
+            {
+                //m_Rigidbody.transform.localScale = new Vector3(1f, 1f, 1f);
+                m_Size = "Normal";
+                StartCoroutine(ScaleCoroutine.RescaleAnimation(this));
+            }
 
-        if (Input.GetButton("Small"))
-        {
-            m_Rigidbody.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-            m_Size = "Small";
+            if (Input.GetButton("Small") && m_Size == "Normal")
+            {
+                //m_Rigidbody.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+                m_Size = "Small";
+                StartCoroutine(ScaleCoroutine.RescaleAnimation(this));
+            }
+
+            if (Input.GetButton("Big") && IsPossibleToGrowUp && m_Size == "Normal")
+            {
+                //m_Rigidbody.transform.localScale = new Vector3(2f, 2f, 2f);
+                m_Size = "Big";
+                StartCoroutine(ScaleCoroutine.RescaleAnimation(this));
+            }
         }
         
-        if (Input.GetButton("Big") && IsPossibleToGrowUp && Time.time > m_NextSizeChange)
-        {
-            m_Rigidbody.transform.localScale = new Vector3(2f, 2f, 2f);
-            m_Size = "Big";
-        }
 
         //Saut
         //Faire sauter le joueur
@@ -167,6 +177,8 @@ public class PlayerController : MonoBehaviour,IColorable
         }
     }
 
+    
+
     public void Paint(MeshRenderer newMaterial)
     {
         MeshRenderer mr = GetComponentInChildren<MeshRenderer>();
@@ -227,4 +239,7 @@ public class PlayerController : MonoBehaviour,IColorable
             mr.materials = ListMaterial;
         }
     }
+
+    public string getSize() { return m_Size; }
+    public void setCoroutineSizeFinish(bool etat) { this.m_CoroutineSizeFinish = etat; }
 }
