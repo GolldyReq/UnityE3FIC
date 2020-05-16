@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour,IColorable
 {
     [Tooltip("La vitesse en m.s-1")]
     [SerializeField] float m_Speed;
@@ -22,6 +22,12 @@ public class PlayerController : MonoBehaviour
     private float m_NextJump;
 
     private string m_Size;
+    private string m_Color;
+    private int m_Mass;
+
+    private MeshRenderer m_PrimaryColor;
+    private Material m_SecondaryColor;
+
 
 
     private void Awake()
@@ -35,6 +41,8 @@ public class PlayerController : MonoBehaviour
         m_OnGround = true;
         m_NextJump = Time.time;
         m_Size = "Normal";
+        m_Color = "White";
+        m_Mass = 0;
     }
 
     // Update is called once per frame
@@ -99,8 +107,12 @@ public class PlayerController : MonoBehaviour
             m_OnGround = false;
     }
     
+
+    //Entrée dans un trigger
     private void OnTriggerEnter(Collider other)
     {
+
+        //Trigger tuant le player
         if (other.gameObject.CompareTag("Killable"))
         {
             Debug.Log(other.name);
@@ -108,7 +120,32 @@ public class PlayerController : MonoBehaviour
             Destroy(gameObject);
             Destroy(GameObject.Find("camera"));
         }
+
+        if( other.gameObject.CompareTag("Paint"))
+        {
+            Debug.Log("Paint");
+            Paint(other.GetComponent<MeshRenderer>());
+        }
+
+
     }
 
+    public void Paint(MeshRenderer newMaterial)
+    {
+        MeshRenderer mr = GetComponentInChildren<MeshRenderer>();
+        if (mr)
+        {
+            int x = mr.materials.Length;
+            Debug.Log("number of materal : " + x);
+            Material[] ListMaterial = mr.materials;
+            Debug.Log(ListMaterial[1].name);
+            ListMaterial[1].color = newMaterial.material.color;
+            mr.materials = ListMaterial;
+            
+            //mr.material.color = Color.blue;
+            //mr.material.color = newMaterial.material.color;
+            //mr.material.mainTexture = newMaterial.material.mainTexture;
 
+        }
+    }
 }

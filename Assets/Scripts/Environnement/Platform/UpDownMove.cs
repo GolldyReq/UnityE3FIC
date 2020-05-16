@@ -7,7 +7,7 @@ public class UpDownMove : MonoBehaviour
     [Range(-1, 1)]
     [SerializeField] int m_Direction;
 
-    [Range(0, 5)]
+    [Range(0, 10)]
     [SerializeField] int m_Speed;
 
     [Range(0, 10)]
@@ -28,8 +28,11 @@ public class UpDownMove : MonoBehaviour
 
         Vector3 move = Vector3.up * m_Direction * m_Speed * Time.deltaTime;
         transform.Translate(move, Space.Self);
-        if (transform.position.y > (m_BasePosition.y + m_Distance) || transform.position.y < (m_BasePosition.y - m_Distance))
-            m_Direction = m_Direction * (-1);
+        if (transform.position.y > (m_BasePosition.y + m_Distance) )
+            m_Direction = -1;
+        if ( transform.position.y < (m_BasePosition.y - m_Distance))
+            m_Direction = 1;
+
 
     }
 }

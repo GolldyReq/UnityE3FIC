@@ -8,7 +8,7 @@ public class LeftRightMoveX : MonoBehaviour
     [Range(-1, 1)]
     [SerializeField] int m_Direction;
 
-    [Range(0, 5)]
+    [Range(0, 10)]
     [SerializeField] int m_Speed;
 
     [Range(0, 10)]
@@ -26,11 +26,18 @@ public class LeftRightMoveX : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        /*
         Vector3 move = Vector3.forward * m_Direction * m_Speed * Time.deltaTime;
         transform.Translate(move, Space.Self);
         if (transform.position.x > (m_BasePosition.x + m_Distance) || transform.position.x < (m_BasePosition.x - m_Distance))
             m_Direction = m_Direction * (-1);
+        */
 
+        Vector3 move = Vector3.forward * m_Direction * m_Speed * Time.deltaTime;
+        transform.Translate(move, Space.Self);
+        if (transform.position.x > (m_BasePosition.x + m_Distance))
+            m_Direction = -1;
+        if (transform.position.x < (m_BasePosition.x - m_Distance))
+            m_Direction = 1;
     }
 }
