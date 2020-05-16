@@ -35,7 +35,6 @@ public class ScaleCoroutine : MonoBehaviour
     public static IEnumerator RescaleAnimation(PlayerController player)
     {
         Debug.Log("Debut Coroutine - " + player.getSize());
-
         player.setCoroutineSizeFinish (false);
         Vector3 TargetScale = new Vector3(1f,1f,1f);
         if (player.getSize() == "Small")
