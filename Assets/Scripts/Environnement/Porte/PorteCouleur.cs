@@ -4,44 +4,52 @@ using UnityEngine;
 
 public class PorteCouleur : MonoBehaviour
 {
+
+    BoxCollider bc_door;
+    Material m_door;
+    private string[] m_name;
+
+    void Awake()
+    {
+        bc_door = gameObject.GetComponent<BoxCollider>();
+        m_door = gameObject.GetComponent<MeshRenderer>().material;
+        m_name = m_door.name.Split(' ');
+    }
     // Start is called before the first frame update
     void Start()
     {
-        
+        bc_door.enabled = true;
+        bc_door.isTrigger = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.CompareTag("Player"))
+
+        if (other.gameObject.CompareTag("Player"))
         {
-            MeshRenderer mr_player = collision.gameObject.GetComponentInChildren<MeshRenderer>();
+            MeshRenderer mr_player = other.gameObject.GetComponentInChildren<MeshRenderer>();
             Material[] playerMaterial = mr_player.materials;
 
-            BoxCollider bcDoor = gameObject.GetComponent<BoxCollider>();
-            bcDoor.enabled = true;
-            Material m_door = gameObject.GetComponent<MeshRenderer>().material;
-            
-            string[] test = m_door.name.Split(' ');
-
-            
 
             foreach (Material m_material in playerMaterial)
             {
-                if (m_material.name.Contains(test[0].ToLower()))
+                if (!m_material.name.Contains(m_name[0].ToLower()))
                 {
-                    Debug.Log("Ouverture");
-                    
-                    if (bcDoor)
-                        bcDoor.enabled = false;
-                    
+                    other.GetComponentInParent<Rigidbody>().velocity = Vector3.zero;
+                    if (bc_door)
+                        bc_door.isTrigger = false;
                 }
             }
         }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        bc_door.isTrigger = true;
     }
 }

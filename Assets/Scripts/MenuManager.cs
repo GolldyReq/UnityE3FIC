@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class MenuManager : MonoBehaviour
 {
@@ -13,11 +14,18 @@ public class MenuManager : MonoBehaviour
     public bool IsReady { get { return m_IsReady; } }
 
     [SerializeField] GameObject m_MenuPanel;
+    [SerializeField] GameObject m_VictoryPanel;
+    [SerializeField] GameObject m_GameOverPanel;
+    [SerializeField] GameObject m_PlayPanel;
 
     List<GameObject> m_Panels = new List<GameObject>();
 
+    EventSystem eventSystem;
+
 
     public event Action OnPlayButtonHasBeenClicked;
+    public event Action OnLevelFinish;
+    public event Action OnGameOver;
 
     private void ActivatePannel(GameObject pannel)
     {
@@ -31,14 +39,19 @@ public class MenuManager : MonoBehaviour
         {
             case GameManager.GAMESTATE.Menu:
                 ActivatePannel(m_MenuPanel);
+                eventSystem.SetSelectedGameObject(GameObject.Find("PlayButton"));
                 break;
             case GameManager.GAMESTATE.Play:
-                ActivatePannel(null);
+                ActivatePannel(m_PlayPanel);
                 break;
-            case GameManager.GAMESTATE.Vicrory:
+            case GameManager.GAMESTATE.Victory:
+                ActivatePannel(m_VictoryPanel);
+                eventSystem.SetSelectedGameObject(GameObject.Find("NextLevel"));
                 break;
-
-
+            case GameManager.GAMESTATE.GameOver:
+                ActivatePannel(m_GameOverPanel);
+                eventSystem.SetSelectedGameObject(GameObject.Find("ExitButton"));
+                break;
         }
     }
 
@@ -51,12 +64,14 @@ public class MenuManager : MonoBehaviour
         else
             Destroy(gameObject);
 
-        Debug.Log("oui");
-
         Debug.Log(m_MenuPanel.name);
         
-        if(m_MenuPanel != null)
-            m_Panels.Add(m_MenuPanel);
+        m_Panels.Add(m_MenuPanel);
+        m_Panels.Add(m_VictoryPanel);
+        m_Panels.Add(m_GameOverPanel);
+        m_Panels.Add(m_PlayPanel);
+
+        eventSystem = GameObject.FindObjectOfType<EventSystem>();
         
     
     }
@@ -70,5 +85,15 @@ public class MenuManager : MonoBehaviour
     public void PlayButtonHasBeenClicked()
     {
         if (OnPlayButtonHasBeenClicked != null) OnPlayButtonHasBeenClicked();
+    }
+
+    public void LevelFinish()
+    {
+        if (OnLevelFinish != null) OnLevelFinish();
+    }
+
+    public void GameOver()
+    {
+        if (OnGameOver != null) OnGameOver();
     }
 }

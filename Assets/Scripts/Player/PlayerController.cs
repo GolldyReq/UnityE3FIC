@@ -27,10 +27,17 @@ public class PlayerController : MonoBehaviour,IColorable
     private string m_Size;
     private string m_Color;
     private int m_Mass;
+
+
+    private Vector3 m_InitialPos;
+    private Vector3 m_InitialCameraPos;
+
+    private int m_Life;
     
     private void Awake()
     {
         m_Rigidbody = GetComponentInChildren<Rigidbody>();
+        m_Life = 3;
     }
 
     // Start is called before the first frame update
@@ -46,6 +53,10 @@ public class PlayerController : MonoBehaviour,IColorable
         m_Size = "Normal";
         m_Color = "White";
         m_Mass = 0;
+
+        m_InitialPos = transform.position;
+        m_InitialCameraPos = camera.transform.position;
+
     }
 
     // Update is called once per frame
@@ -77,16 +88,34 @@ public class PlayerController : MonoBehaviour,IColorable
         float taille_agrandissement = 1.2f;
         bool IsPossibleToGrowUp = true;
         if (m_Size == "Small")
-            taille_agrandissement = 2.7f;
+            taille_agrandissement = 1.2f;
 
         //On verifie que le grandissement ne provoque pas de collision       
         //Verifier si le centre de la sphére va toucher 
         //if (Physics.Raycast(transform.position, Vector3.up, out hit, taille_agrandissement))
-        if (Physics.SphereCast(transform.position, 0.1f, Vector3.up, out hit, taille_agrandissement))
+        if (m_Size != "Big")
         {
-            //Debug.DrawRay(transform.position, Vector3.up * hit.distance, Color.red);
-            IsPossibleToGrowUp = false;
-            m_NextSizeChange = Time.time + m_SizeChangeCoolDown;
+            //Verification collision au dessus
+            if (Physics.SphereCast(transform.position, 0.1f, Vector3.up, out hit, taille_agrandissement))
+            {
+                Debug.DrawRay(transform.position, Vector3.up * hit.distance, Color.red);
+                IsPossibleToGrowUp = false;
+                //m_NextSizeChange = Time.time + m_SizeChangeCoolDown;
+            }
+            //Avant/arriere
+            if (Physics.SphereCast(transform.position, 0.1f, Vector3.forward, out hit, taille_agrandissement)
+                && Physics.SphereCast(transform.position, 0.1f, -Vector3.forward, out hit, taille_agrandissement))
+            {
+                IsPossibleToGrowUp = false;
+                //m_NextSizeChange = Time.time + m_SizeChangeCoolDown;
+            }
+            //Gauche/droite
+            if (Physics.SphereCast(transform.position, 0.1f, Vector3.right, out hit, taille_agrandissement)
+                && Physics.SphereCast(transform.position, 0.1f, -Vector3.right, out hit, taille_agrandissement))
+            {
+                IsPossibleToGrowUp = false;
+                //m_NextSizeChange = Time.time + m_SizeChangeCoolDown;
+            }
         }
 
         //Changement de taille avec L1/R1 si cela est possible
@@ -169,8 +198,19 @@ public class PlayerController : MonoBehaviour,IColorable
             Destroy(gameObject);
             Destroy(GameObject.Find("camera"));
             */
-            transform.position = new Vector3(0, 1, -23);
-
+            if (m_Life > 1)
+            {
+                m_Life--;
+                m_Rigidbody.velocity = Vector3.zero;
+                m_Rigidbody.isKinematic = true;
+                m_Rigidbody.isKinematic = false;
+                transform.position = m_InitialPos;
+                camera.position = m_InitialCameraPos;
+            }
+            else
+            {
+                MenuManager.Instance.GameOver();
+            }
         }
 
         if (other.gameObject.CompareTag("Paint"))

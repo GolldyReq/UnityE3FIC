@@ -17,7 +17,17 @@ public class CameraController : MonoBehaviour
     [Range(0, 5)]
     [SerializeField] float m_height;
 
+    private static Vector3 m_InitialPosition;
 
+    public void reset ()
+    {
+        transform.position = m_InitialPosition;
+    }
+
+    void Awake()
+    {
+        m_InitialPosition = target.position;
+    }
 
     void Start()
     {
@@ -26,9 +36,9 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        if (!GameManager.Instance.IsPlaying) return;
+        //if (!GameManager.Instance.IsPlaying) return;
 
-        if (Input.GetKey(KeyCode.Escape))
+        if (Input.GetKey(KeyCode.Escape) || !GameManager.Instance.IsPlaying)
             Cursor.lockState = CursorLockMode.None;
         else
             Cursor.lockState = CursorLockMode.Locked;
