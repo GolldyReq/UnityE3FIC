@@ -23,20 +23,24 @@ public class PorteCouleur : MonoBehaviour
             MeshRenderer mr_player = collision.gameObject.GetComponentInChildren<MeshRenderer>();
             Material[] playerMaterial = mr_player.materials;
 
-            MeshRenderer mr_door = gameObject.GetComponent<MeshRenderer>();
-
-            Material m_door = mr_door.material;
+            BoxCollider bcDoor = gameObject.GetComponent<BoxCollider>();
+            bcDoor.enabled = true;
+            Material m_door = gameObject.GetComponent<MeshRenderer>().material;
             
             string[] test = m_door.name.Split(' ');
 
-
-            Debug.Log(mr_door.name);
+            
 
             foreach (Material m_material in playerMaterial)
             {
                 if (m_material.name.Contains(test[0].ToLower()))
+                {
                     Debug.Log("Ouverture");
-
+                    
+                    if (bcDoor)
+                        bcDoor.enabled = false;
+                    
+                }
             }
         }
     }

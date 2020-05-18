@@ -56,10 +56,12 @@ public class PlayerController : MonoBehaviour,IColorable
 
     private void FixedUpdate()
     {
+        if (!GameManager.Instance.IsPlaying) return;
+        
         //Mouvement
         //Recuperation valeur Joystick
         float moveHorizontal = Input.GetAxis("Horizontal");
-		float moveVertical = Input.GetAxis("Vertical");
+        float moveVertical = Input.GetAxis("Vertical");
 
         //Vecteur de translation avec les inputs
         Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
@@ -68,7 +70,7 @@ public class PlayerController : MonoBehaviour,IColorable
         var actualDirection = camera.TransformDirection(movement);
         m_Rigidbody.AddForce(actualDirection * m_Speed * Time.fixedDeltaTime, ForceMode.VelocityChange);
 
-        
+
         //Changement de taille
         //Savoir s'il est possible de changer de taille
         RaycastHit hit;
@@ -76,11 +78,11 @@ public class PlayerController : MonoBehaviour,IColorable
         bool IsPossibleToGrowUp = true;
         if (m_Size == "Small")
             taille_agrandissement = 2.7f;
-        
+
         //On verifie que le grandissement ne provoque pas de collision       
         //Verifier si le centre de la sphére va toucher 
         //if (Physics.Raycast(transform.position, Vector3.up, out hit, taille_agrandissement))
-        if ( Physics.SphereCast(transform.position,0.1f, Vector3.up, out hit , taille_agrandissement))
+        if (Physics.SphereCast(transform.position, 0.1f, Vector3.up, out hit, taille_agrandissement))
         {
             //Debug.DrawRay(transform.position, Vector3.up * hit.distance, Color.red);
             IsPossibleToGrowUp = false;
@@ -111,7 +113,7 @@ public class PlayerController : MonoBehaviour,IColorable
                 StartCoroutine(ScaleCoroutine.RescaleAnimation(this));
             }
         }
-        
+
 
         //Saut
         //Faire sauter le joueur
@@ -119,14 +121,14 @@ public class PlayerController : MonoBehaviour,IColorable
         if (Is_Jumped && m_OnGround && Time.time > m_NextJump)
         {
             Debug.Log("Saut");
-            m_Rigidbody.AddForce(Vector3.up *m_Jump* Time.fixedDeltaTime, ForceMode.Impulse);
+            m_Rigidbody.AddForce(Vector3.up * m_Jump * Time.fixedDeltaTime, ForceMode.Impulse);
             //m_Rigidbody.AddForce(Vector3.up *m_Jump* Time.fixedDeltaTime, ForceMode.VelocityChange);
             m_OnGround = false;
             m_NextJump = Time.time + m_JumpCooldown;
         }
 
         //fusion couleur
-        if(Input.GetButton("Fusion"))
+        if (Input.GetButton("Fusion"))
         {
             FusionColor();
         }

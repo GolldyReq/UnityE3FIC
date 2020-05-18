@@ -26,6 +26,8 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
+        if (!GameManager.Instance.IsPlaying) return;
+
         if (Input.GetKey(KeyCode.Escape))
             Cursor.lockState = CursorLockMode.None;
         else
@@ -35,6 +37,8 @@ public class CameraController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!GameManager.Instance.IsPlaying) return;
+
         if (target == null)
         {
             transform.position = new Vector3(0, 0, 0);
