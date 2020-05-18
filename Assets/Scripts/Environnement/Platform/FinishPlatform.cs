@@ -22,6 +22,7 @@ public class FinishPlatform : MonoBehaviour
         {
             Debug.Log("Fin niveau");
             MenuManager.Instance.LevelFinish();
+            
         }
     }
 }

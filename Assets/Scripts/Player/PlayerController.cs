@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -33,7 +34,13 @@ public class PlayerController : MonoBehaviour,IColorable
     private Vector3 m_InitialCameraPos;
 
     private int m_Life;
-    
+    private int m_Score;
+
+
+
+
+
+
     private void Awake()
     {
         m_Rigidbody = GetComponentInChildren<Rigidbody>();
@@ -201,6 +208,7 @@ public class PlayerController : MonoBehaviour,IColorable
             if (m_Life > 1)
             {
                 m_Life--;
+                HUDManager.Instance.UpdateNbLife(m_Life);
                 m_Rigidbody.velocity = Vector3.zero;
                 m_Rigidbody.isKinematic = true;
                 m_Rigidbody.isKinematic = false;
@@ -277,7 +285,7 @@ public class PlayerController : MonoBehaviour,IColorable
                 ListMaterial[0] = (Material)Resources.Load("Materials/Paint/Ljaune", typeof(Material));
                 ListMaterial[1] = (Material)Resources.Load("Materials/Paint/Rjaune", typeof(Material));
             }
-
+            
             mr.materials = ListMaterial;
         }
     }

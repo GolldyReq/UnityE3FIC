@@ -11,8 +11,9 @@ public class PorteCouleur : MonoBehaviour
 
     void Awake()
     {
+        
         bc_door = gameObject.GetComponent<BoxCollider>();
-        m_door = gameObject.GetComponent<MeshRenderer>().material;
+        m_door = gameObject.GetComponentInChildren<MeshRenderer>().material;
         m_name = m_door.name.Split(' ');
     }
     // Start is called before the first frame update

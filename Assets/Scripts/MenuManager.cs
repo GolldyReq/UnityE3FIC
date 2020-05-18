@@ -24,6 +24,12 @@ public class MenuManager : MonoBehaviour
 
 
     public event Action OnPlayButtonHasBeenClicked;
+
+    public event Action OnReplayButton;
+    public event Action OnNextLevelButton;
+    public event Action OnExitButton;
+
+
     public event Action OnLevelFinish;
     public event Action OnGameOver;
 
@@ -95,5 +101,20 @@ public class MenuManager : MonoBehaviour
     public void GameOver()
     {
         if (OnGameOver != null) OnGameOver();
+    }
+
+    public void ReplayButton()
+    {
+
+    }
+
+    public void NextLevelButton()
+    {
+
+    }
+
+    public void ExitButton()
+    {
+        if (OnExitButton != null) OnExitButton();
     }
 }
