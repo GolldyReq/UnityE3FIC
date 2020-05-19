@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
     public bool IsPlaying {  get { return m_State == GAMESTATE.Play; } }
 
     public int m_Life;
-    public int Life {  get { return m_Life; } }
+    public int Life { get { return m_Life; } set { m_Life = value; }  }
     public int m_Score;
     public int Score { get { return m_Score; } }
 

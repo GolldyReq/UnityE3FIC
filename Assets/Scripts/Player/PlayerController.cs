@@ -20,12 +20,15 @@ public class PlayerController : MonoBehaviour,IColorable
     [SerializeField] float m_JumpCooldown;
     private float m_NextJump;
 
+
+    /*
     private float m_SizeChangeCoolDown;
     private float m_NextSizeChange;
     private bool m_CoroutineSizeFinish;
-
-
     private string m_Size;
+    */
+    public PlayerSize m_PlayerSize;
+
     private string m_Color;
     private int m_Mass;
 
@@ -36,17 +39,11 @@ public class PlayerController : MonoBehaviour,IColorable
     private int m_Life;
 
 
-    /* Factorisation du code 
-     * PlayerSize m_PlayerSize;
-     * PlayerColor m_PlayerColor;
-     * PlayerMass m_PlayerMass;
-     */ 
-
-
     private void Awake()
     {
         m_Rigidbody = GetComponentInChildren<Rigidbody>();
-        m_Life = 3;
+        m_Life = GameManager.Instance.m_Life;
+        m_PlayerSize = new PlayerSize();
     }
 
     // Start is called before the first frame update
@@ -55,14 +52,15 @@ public class PlayerController : MonoBehaviour,IColorable
         m_OnGround = true;
         m_NextJump = Time.time;
 
+        /*
         m_SizeChangeCoolDown = 0.5f;
         m_NextSizeChange = Time.time;
         m_CoroutineSizeFinish = true;
-
         m_Size = "Normal";
+        */
+
         m_Color = "White";
         m_Mass = 0;
-
         m_InitialPos = transform.position;
         m_InitialCameraPos = camera.transform.position;
 
@@ -90,6 +88,9 @@ public class PlayerController : MonoBehaviour,IColorable
         var actualDirection = camera.TransformDirection(movement);
         m_Rigidbody.AddForce(actualDirection * m_Speed * Time.fixedDeltaTime, ForceMode.VelocityChange);
 
+        m_PlayerSize.ChangeSize(this);
+
+        /*
 
         //Changement de taille
         //Savoir s'il est possible de changer de taille
@@ -151,6 +152,7 @@ public class PlayerController : MonoBehaviour,IColorable
                 StartCoroutine(ScaleCoroutine.RescaleAnimation(this));
             }
         }
+        */
 
 
         //Saut
@@ -291,7 +293,8 @@ public class PlayerController : MonoBehaviour,IColorable
             mr.materials = ListMaterial;
         }
     }
-
+    /*
     public string getSize() { return m_Size; }
     public void setCoroutineSizeFinish(bool etat) { this.m_CoroutineSizeFinish = etat; }
+    */
 }
