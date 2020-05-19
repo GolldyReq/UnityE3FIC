@@ -34,11 +34,13 @@ public class PlayerController : MonoBehaviour,IColorable
     private Vector3 m_InitialCameraPos;
 
     private int m_Life;
-    private int m_Score;
 
 
-
-
+    /* Factorisation du code 
+     * PlayerSize m_PlayerSize;
+     * PlayerColor m_PlayerColor;
+     * PlayerMass m_PlayerMass;
+     */ 
 
 
     private void Awake()

@@ -49,9 +49,13 @@ public class CoinMove : MonoBehaviour
     //Le joueur récupére la piéce 
     private void OnTriggerEnter(Collider other)
     {
-        m_Effect.Play();
-        MeshRenderer mr_visible  = gameObject.GetComponent<MeshRenderer>();
-        mr_visible.enabled = false;
-        Destroy(gameObject, 1f);
+        if (other.gameObject.CompareTag("Player"))
+        {
+            m_Effect.Play();
+            MeshRenderer mr_visible = gameObject.GetComponent<MeshRenderer>();
+            mr_visible.enabled = false;
+            HUDManager.Instance.UpdateNbScore(25);
+            Destroy(gameObject, 1f);
+        }
     }
 }

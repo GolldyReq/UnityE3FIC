@@ -41,18 +41,7 @@ public class GameManager : MonoBehaviour
             OnGameStateChange(m_State);
     }
 
-    void LoadingLevel(int level)
-    {
-        m_Level = level;
-        if (OnLoadingLevel != null) OnLoadingLevel(m_Level);
-    }
-
-    void DestroyLevel()
-    {
-        if (OnDestroyLevel != null) OnDestroyLevel(m_Level);
-    }
-
-
+   
     private void Awake()
     {
         if (m_Instance == null)
@@ -86,11 +75,21 @@ public class GameManager : MonoBehaviour
     {
         m_Life = 3;
         m_Score = 0;
-        if (OnGameStatisticsChange != null) OnGameStatisticsChange(m_Life);
+        if (OnGameStatisticsChange != null) { HUDManager.Instance.UpdateNbLife(m_Life); HUDManager.Instance.UpdateNbScore(m_Score); }
         ChangeState(GAMESTATE.Play);
         LoadingLevel(m_Level);
     }
 
+    void LoadingLevel(int level)
+    {
+        m_Level = level;
+        if (OnLoadingLevel != null) OnLoadingLevel(m_Level);
+    }
+
+    void DestroyLevel()
+    {
+        if (OnDestroyLevel != null) OnDestroyLevel(m_Level);
+    }
 
     void LevelFinish()
     {
@@ -100,16 +99,28 @@ public class GameManager : MonoBehaviour
     void GameOver()
     {
         ChangeState(GAMESTATE.GameOver);
+        m_Score = 0;
+        HUDManager.Instance.UpdateNbScore(m_Score);
+
     }
 
     void ReplayButton()
     {
-
+        m_Life = 3;
+        HUDManager.Instance.UpdateNbLife(m_Life);
+        ChangeState(GAMESTATE.Play);
+        DestroyLevel();
+        LoadingLevel(m_Level);
     }
 
     void NextLevelButton()
     {
-
+        ChangeState(GAMESTATE.Play);
+        //A remplacer par la commande en commentaire
+        DestroyLevel();
+        m_Level++;
+        LoadingLevel(m_Level);
+        //LoadingNextLevel(m_Level);
     }
 
     void ExitButton()

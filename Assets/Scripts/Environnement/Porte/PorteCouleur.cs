@@ -12,7 +12,7 @@ public class PorteCouleur : MonoBehaviour
     void Awake()
     {
         
-        bc_door = gameObject.GetComponent<BoxCollider>();
+        bc_door = gameObject.GetComponentInChildren<BoxCollider>();
         m_door = gameObject.GetComponentInChildren<MeshRenderer>().material;
         m_name = m_door.name.Split(' ');
     }
@@ -37,17 +37,23 @@ public class PorteCouleur : MonoBehaviour
             Material[] playerMaterial = mr_player.materials;
 
 
-            foreach (Material m_material in playerMaterial)
-            {
-                if (!m_material.name.Contains(m_name[0].ToLower()))
+            //foreach (Material m_material in playerMaterial)
+            //{
+            if (!playerMaterial[0].name.Contains(m_name[0].ToLower()) && !playerMaterial[0].name.Contains(m_name[0].ToLower()))
                 {
-                    other.GetComponentInParent<Rigidbody>().velocity = Vector3.zero;
                     if (bc_door)
                         bc_door.isTrigger = false;
                 }
-            }
+            //}
         }
     }
+
+    /*
+    private void OnTriggerStay(Collider other)
+    {
+        OnTriggerEnter(other);
+    }
+    */
 
     private void OnCollisionExit(Collision collision)
     {

@@ -105,12 +105,12 @@ public class MenuManager : MonoBehaviour
 
     public void ReplayButton()
     {
-
+        if (OnReplayButton != null) OnReplayButton();
     }
 
     public void NextLevelButton()
     {
-
+        if (OnNextLevelButton != null) OnNextLevelButton();
     }
 
     public void ExitButton()

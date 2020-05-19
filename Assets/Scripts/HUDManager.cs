@@ -11,18 +11,28 @@ public class HUDManager : MonoBehaviour
 
     [SerializeField] Text m_NbLifeText;
     [SerializeField] Text m_NbScoreText;
+    [SerializeField] Text m_HelpText;
 
     private PlayerController player;
+
+    public int m_Score;
+    public int m_Life;
+    public int Score { get { return m_Score; } set { this.m_Score = Score; } }
+
 
 
     public void UpdateNbLife(int nLife)
     {
-        m_NbLifeText.text = "Life : " + nLife ;
+        m_Life = nLife;
+        GameManager.Instance.m_Life = m_Life;
+        m_NbLifeText.text = "Life : " + m_Life;
     }
 
-    void UpdateNbScore(int nScore)
+    public void UpdateNbScore(int nScore)
     {
-        m_NbScoreText.text = "Score : " + nScore;
+        m_Score += nScore;
+        GameManager.Instance.m_Score = m_Score;
+        m_NbScoreText.text = "Score : " + m_Score;
     }
 
     void Awake()
@@ -38,6 +48,8 @@ public class HUDManager : MonoBehaviour
     {
         
         GameManager.Instance.OnGameStatisticsChange += UpdateNbLife;
+        GameManager.Instance.OnGameStatisticsChange += UpdateNbScore;
+        m_Score = 0;
 
     }
 
@@ -46,4 +58,15 @@ public class HUDManager : MonoBehaviour
     {
         
     }
+
+    public static void PrintHelpText(string msg)
+    {
+        HUDManager.Instance.m_HelpText.text = msg;
+    }
+    public static void EraseHelpText()
+    {
+        HUDManager.Instance.m_HelpText.text = "";
+    }
+
+
 }
