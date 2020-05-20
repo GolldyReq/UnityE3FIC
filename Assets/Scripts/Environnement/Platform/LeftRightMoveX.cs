@@ -26,13 +26,6 @@ public class LeftRightMoveX : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /*
-        Vector3 move = Vector3.forward * m_Direction * m_Speed * Time.deltaTime;
-        transform.Translate(move, Space.Self);
-        if (transform.position.x > (m_BasePosition.x + m_Distance) || transform.position.x < (m_BasePosition.x - m_Distance))
-            m_Direction = m_Direction * (-1);
-        */
-
         Vector3 move = Vector3.right * m_Direction * m_Speed * Time.deltaTime;
         transform.Translate(move, Space.Self);
         if (transform.position.x > (m_BasePosition.x + m_Distance))
