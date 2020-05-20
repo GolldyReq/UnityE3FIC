@@ -106,6 +106,8 @@ public class PlayerColor : IColorable
     private void ChangeColorfusion(string fusionResult)
     {
         m_ListMaterialPlayer[0] = (Material)Resources.Load("Materials/Paint/L" + fusionResult, typeof(Material));
+        m_Lcolor = "L" + fusionResult;
         m_ListMaterialPlayer[1] = (Material)Resources.Load("Materials/Paint/R" + fusionResult, typeof(Material));
+        m_Rcolor = "R" + fusionResult;
     }
 }

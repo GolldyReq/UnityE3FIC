@@ -39,7 +39,7 @@ public class PorteCouleur : MonoBehaviour
 
             //foreach (Material m_material in playerMaterial)
             //{
-            if (!playerMaterial[0].name.Contains(m_name[0].ToLower()) && !playerMaterial[0].name.Contains(m_name[0].ToLower()))
+            if (!playerMaterial[0].name.Contains(m_name[0].ToLower()) && !playerMaterial[1].name.Contains(m_name[0].ToLower()))
                 {
                     if (bc_door)
                         bc_door.isTrigger = false;
