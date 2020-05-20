@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,7 +14,7 @@ public class HUDManager : MonoBehaviour
     [SerializeField] Text m_NbScoreText;
     [SerializeField] Text m_HelpText;
 
-    private PlayerController player;
+    private Player player;
 
     public int m_Score;
     public int m_Life;

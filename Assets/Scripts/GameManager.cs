@@ -100,6 +100,7 @@ public class GameManager : MonoBehaviour
     {
         ChangeState(GAMESTATE.GameOver);
         m_Score = 0;
+        m_Life = 3;
         HUDManager.Instance.UpdateNbScore(m_Score);
 
     }

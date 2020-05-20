@@ -25,6 +25,7 @@ public class PrintMessageTrigger : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             HUDManager.PrintHelpText(Message);
+            Debug.Log(Message);
         }
     }
     void OnTriggerExit(Collider other)
