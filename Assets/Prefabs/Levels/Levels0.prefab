@@ -310,7 +310,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52425452d56dc4646b6c9c15c3282231, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Direction: -1
+  m_Direction: 1
   m_Speed: 3
   m_Distance: 5
 --- !u!114 &8565909597329615006
@@ -2489,6 +2489,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Coin
       objectReference: {fileID: 0}
+    - target: {fileID: 4519788048044688119, guid: 59c4057d147177748af4448ec26ff130,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: af4a422a478e37c4794d6988fb6bcf38, type: 2}
     - target: {fileID: 4519788048044688121, guid: 59c4057d147177748af4448ec26ff130,
         type: 3}
       propertyPath: m_LocalPosition.x
