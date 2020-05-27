@@ -47,6 +47,13 @@ public class PlayerDebug : MonoBehaviour
         m_InitialCameraPos = camera.transform.position;
     }
 
+    private void Update()
+    {
+        //Changement de taille
+        m_PlayerSize.ChangeSize(this);
+    }
+
+
     private void FixedUpdate()
     {
         //Mouvement
@@ -60,8 +67,16 @@ public class PlayerDebug : MonoBehaviour
         //Peut etre mis en commentaire pour changer le style
         var actualDirection = camera.TransformDirection(movement);
         actualDirection.y = 0;
-        m_Rigidbody.AddForce(actualDirection * m_Speed * Time.fixedDeltaTime, ForceMode.VelocityChange);
-        m_PlayerSize.ChangeSize(this);
+        //m_Rigidbody.AddForce(actualDirection * m_Speed * Time.fixedDeltaTime, ForceMode.VelocityChange);
+        //m_PlayerSize.ChangeSize(this);
+
+        //Si au sol : Mouvement sinon Limiter le "air-control"
+        if (m_OnGround)
+            m_Rigidbody.AddForce(actualDirection * m_Speed * Time.fixedDeltaTime, ForceMode.VelocityChange);
+        else
+            m_Rigidbody.AddForce((0.5f * actualDirection  * m_Speed * Time.fixedDeltaTime), ForceMode.VelocityChange);
+
+
 
         //Saut
         bool Is_Jumped = Input.GetButton("Saut");

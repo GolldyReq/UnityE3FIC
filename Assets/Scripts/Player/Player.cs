@@ -75,7 +75,7 @@ public class Player : MonoBehaviour
         if(m_OnGround)
             m_Rigidbody.AddForce(actualDirection * m_Speed * Time.fixedDeltaTime, ForceMode.VelocityChange);
         else
-            m_Rigidbody.AddForce((0.5f * actualDirection * m_Speed * Time.fixedDeltaTime), ForceMode.VelocityChange);
+            m_Rigidbody.AddForce((0.75f * actualDirection * m_Speed * Time.fixedDeltaTime), ForceMode.VelocityChange);
 
         //Changement de taille
         //m_PlayerSize.ChangeSize(this);
