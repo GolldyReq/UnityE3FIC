@@ -12,7 +12,13 @@ public class HUDManager : MonoBehaviour
 
     [SerializeField] Text m_NbLifeText;
     [SerializeField] Text m_NbScoreText;
+    [SerializeField] Text m_TimerText;
+    [SerializeField] Text m_SpeedPlayer;
     [SerializeField] Text m_HelpText;
+
+    [SerializeField] Image m_PcButton;
+    [SerializeField] Image m_XboxButton;
+    [SerializeField] Image m_PsButton;
 
     private Player player;
 
@@ -69,5 +75,29 @@ public class HUDManager : MonoBehaviour
         HUDManager.Instance.m_HelpText.text = "";
     }
 
+    public static void PrintButtonTouch(Image PcButton, Image XboxButton, Image PsButton)
+    {
+        HUDManager.Instance.m_PcButton.sprite = PcButton.sprite;
+        HUDManager.Instance.m_XboxButton.sprite = XboxButton.sprite;
+        HUDManager.Instance.m_PsButton.sprite = PsButton.sprite;
+        HUDManager.Instance.m_PcButton.gameObject.SetActive(true);
+        HUDManager.Instance.m_XboxButton.gameObject.SetActive(true);
+        HUDManager.Instance.m_PsButton.gameObject.SetActive(true);
+    }
+
+    public static void EraseButtonTouch(Image PcButton, Image XboxButton, Image PsButton)
+    {
+        HUDManager.Instance.m_PcButton.gameObject.SetActive(false);
+        HUDManager.Instance.m_XboxButton.gameObject.SetActive(false);
+        HUDManager.Instance.m_PsButton.gameObject.SetActive(false);
+    }
+    public static void PrintSpeedPlayer(int speed)
+    {
+        HUDManager.Instance.m_SpeedPlayer.text = speed.ToString() + " km/h";
+    }
+    public static void PrintChrono(double time)
+    {
+        HUDManager.Instance.m_TimerText.text = time.ToString();
+    }
 
 }

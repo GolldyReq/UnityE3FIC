@@ -1,7 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+//
+//
+//UNIQUEMENT POUR TESTER / DEBUGGER 
+//
+//
 public class CameraDebug : MonoBehaviour
 {
     [SerializeField] Transform target;
@@ -40,6 +44,8 @@ public class CameraDebug : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
         else
             Cursor.lockState = CursorLockMode.Locked;
+
+        
     }
 
 
@@ -57,6 +63,16 @@ public class CameraDebug : MonoBehaviour
             transform.position = norme.normalized * m_Distance + target.transform.position;
             transform.LookAt(target);
             //transform.position = new Vector3(transform.position.x, 1.5f + target.position.y, transform.position.z);
+
+            float moveCamVertical = Input.GetAxis("R_Vertical");
+            m_height = m_height + 2* (-moveCamVertical) * Time.fixedDeltaTime;
+            if (m_height < .5f)
+                m_height = .5f;
+            if (m_height > 2.5f)
+                m_height = 2.5f;
+
+
+
         }
     }
 }

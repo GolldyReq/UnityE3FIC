@@ -64,6 +64,16 @@ public class CameraController : MonoBehaviour
             transform.LookAt(target);
             //transform.position = new Vector3(transform.position.x, 1.5f + target.position.y, transform.position.z);
 
+            //Mouvement de haut en bas
+            float moveCamVertical = Input.GetAxis("R_Vertical");
+            m_height = m_height + 2 * (-moveCamVertical) * Time.fixedDeltaTime;
+            //Empecher la camera d'être trop basse ou trop haute
+            if (m_height < .5f)
+                m_height = .5f;
+            if (m_height > 2.5f)
+                m_height = 2.5f;
+
+
         }
     }
 }

@@ -31,9 +31,6 @@ public class GameManager : MonoBehaviour
     
     //public event Action OnNextLevel;
        
-    //public event Action<int> OnScoreChange;
-    //public event Action<int> OnLifeChange;
-
     void ChangeState(GAMESTATE state)
     {
         m_State = state;

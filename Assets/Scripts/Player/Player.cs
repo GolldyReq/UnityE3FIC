@@ -11,6 +11,8 @@ public class Player : MonoBehaviour
 
     [Tooltip("La vitesse en m.s-1")]
     [SerializeField] float m_Speed;
+    public float Speed { get { return this.m_Speed; } set { this.m_Speed = value; } }
+    private Vector3 m_LastPosition;
 
     [SerializeField] Transform camera;
     private Vector3 m_InitialPos;
@@ -44,6 +46,13 @@ public class Player : MonoBehaviour
         m_NextJump = Time.time;
         m_InitialPos = transform.position;
         m_InitialCameraPos = camera.transform.position;
+        m_LastPosition = transform.position;
+    }
+
+    private void Update()
+    {
+        //Changement de taille
+        m_PlayerSize.ChangeSize(this);
     }
 
     private void FixedUpdate()
@@ -60,14 +69,27 @@ public class Player : MonoBehaviour
         movement = Vector3.ClampMagnitude(movement, 1);
         //Peut etre mis en commentaire pour changer le style
         var actualDirection = camera.TransformDirection(movement);
-        m_Rigidbody.AddForce(actualDirection * m_Speed * Time.fixedDeltaTime, ForceMode.VelocityChange);
-        m_PlayerSize.ChangeSize(this);
+        actualDirection.y = 0;
+
+        //Si au sol : Mouvement sinon Limiter le "air-control"
+        if(m_OnGround)
+            m_Rigidbody.AddForce(actualDirection * m_Speed * Time.fixedDeltaTime, ForceMode.VelocityChange);
+        else
+            m_Rigidbody.AddForce((0.75f * actualDirection * m_Speed * Time.fixedDeltaTime), ForceMode.VelocityChange);
+
+        //Changement de taille
+        //m_PlayerSize.ChangeSize(this);
+
+        //Calcul de la vitesse
+        int vitesse = Convert.ToInt32((transform.position - m_LastPosition).magnitude/Time.fixedDeltaTime);
+        HUDManager.PrintSpeedPlayer(vitesse);
+        m_LastPosition = transform.position;
 
         //Saut
         bool Is_Jumped = Input.GetButton("Saut");
         if (Is_Jumped && m_OnGround && Time.time > m_NextJump)
         {
-            Debug.Log("Saut");
+            //Ajouter une feature Small : saut plus haut et Big saut plus bas
             m_Rigidbody.AddForce(Vector3.up * m_Jump * Time.fixedDeltaTime, ForceMode.Impulse);
             //m_Rigidbody.AddForce(Vector3.up *m_Jump* Time.fixedDeltaTime, ForceMode.VelocityChange);
             m_OnGround = false;

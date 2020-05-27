@@ -21,6 +21,10 @@ public class PlayerSize
     //Changement de taille avec L1/R1 si cela est possible
     public void ChangeSize(Player player)
     {
+        //Si nous restons appuyé sur le bouton L1/RI
+        if ((Input.GetButton("Small") && Size == PLAYERSIZE.Small) || (Input.GetButton("Big") && Size == PLAYERSIZE.Big))
+            return;
+
         //if (Time.time > m_NextSizeChange && m_CoroutineSizeFinish)
         if (m_CoroutineSizeFinish)
         {
@@ -28,18 +32,21 @@ public class PlayerSize
             {
                 Size = PLAYERSIZE.Normal;
                 player.StartCoroutine(ScaleCoroutine.RescaleAnimation(player));
+                player.Speed = 20;
             }
 
             if (Input.GetButton("Small") && m_Size == PLAYERSIZE.Normal)
             {
                 Size = PLAYERSIZE.Small;
                 player.StartCoroutine(ScaleCoroutine.RescaleAnimation(player));
+                player.Speed = 25;
             }
 
             if (Input.GetButton("Big") && PlayerCollision.CanPlayerChangeSize(player) && m_Size == PLAYERSIZE.Normal)
             {
                 Size = PLAYERSIZE.Big;
                 player.StartCoroutine(ScaleCoroutine.RescaleAnimation(player));
+                player.Speed = 15;
             }
         }
     }
@@ -47,6 +54,10 @@ public class PlayerSize
     //Version Debug
     public void ChangeSize(PlayerDebug player)
     {
+        //Si nous restons appuyé sur le bouton L1/RI
+        if ((Input.GetButton("Small") && Size == PLAYERSIZE.Small) || (Input.GetButton("Big") && Size == PLAYERSIZE.Big))
+            return;
+        
         if (m_CoroutineSizeFinish)
         {
             if (PlayerCollision.CanPlayerChangeSize(player) && Size != PLAYERSIZE.Normal)
@@ -67,5 +78,6 @@ public class PlayerSize
                 player.StartCoroutine(ScaleCoroutine.RescaleAnimation(player));
             }
         }
+        
     }
 }

@@ -2,6 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//
+//
+//UNIQUEMENT POUR TESTER / DEBUGGER 
+//
+//
 public class PlayerDebug : MonoBehaviour
 {
     Rigidbody m_Rigidbody;
@@ -54,6 +59,7 @@ public class PlayerDebug : MonoBehaviour
         movement = Vector3.ClampMagnitude(movement, 1);
         //Peut etre mis en commentaire pour changer le style
         var actualDirection = camera.TransformDirection(movement);
+        actualDirection.y = 0;
         m_Rigidbody.AddForce(actualDirection * m_Speed * Time.fixedDeltaTime, ForceMode.VelocityChange);
         m_PlayerSize.ChangeSize(this);
 
