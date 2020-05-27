@@ -477,7 +477,7 @@ MonoBehaviour:
   m_Levels:
   - {fileID: 6769389157020184199, guid: de1a12f2cbacb644697890d59b342872, type: 3}
   - {fileID: 7080848963996770395, guid: 5fbb1675e08119d4cb11c447f69d160c, type: 3}
-  - {fileID: 7080848963996770395, guid: 5fbb1675e08119d4cb11c447f69d160c, type: 3}
+  - {fileID: 510392811306380139, guid: eabc9587ced0352419af40c386223ca8, type: 3}
   m_Player: {fileID: 1958499414}
   m_Camera: {fileID: 30197449}
   m_IsReady: 0
@@ -1365,7 +1365,7 @@ PrefabInstance:
     - target: {fileID: 1728398569825552223, guid: d6a97bfb435759847b01cb6f4a9d8792,
         type: 3}
       propertyPath: m_FontData.m_Alignment
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2592783299705487613, guid: d6a97bfb435759847b01cb6f4a9d8792,
         type: 3}
