@@ -42,7 +42,7 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        m_OnGround = true;
+        m_OnGround = false;
         m_NextJump = Time.time;
         m_InitialPos = transform.position;
         m_InitialCameraPos = camera.transform.position;

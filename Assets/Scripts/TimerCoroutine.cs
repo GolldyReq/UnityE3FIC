@@ -22,8 +22,8 @@ public class TimerCoroutine : MonoBehaviour
         {
             Timer = Math.Round(Timer + Time.deltaTime,2);
             HUDManager.PrintChrono(Timer);
-            //yield return null;
-            yield return new WaitForSeconds(0.02f);
+            yield return null;
+            //yield return new WaitForSeconds(0.02f);
         }
     }
 }
