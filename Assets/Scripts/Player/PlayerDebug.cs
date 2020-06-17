@@ -103,8 +103,19 @@ public class PlayerDebug : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
+        //Detection avec plateforme ou décor
         if (collision.gameObject.CompareTag("Plateforme") || collision.gameObject.CompareTag("Decor"))
             m_OnGround = true;
+
+        //Detection avec un objet qui tue le joueur
+        if (collision.gameObject.CompareTag("Killable"))
+        {
+            m_Rigidbody.velocity = Vector3.zero;
+            m_Rigidbody.isKinematic = true;
+            m_Rigidbody.isKinematic = false;
+            transform.position = m_InitialPos;
+            camera.position = m_InitialCameraPos;
+        }
     }
     private void OnCollisionExit(Collision collision)
     {
