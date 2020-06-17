@@ -6,7 +6,7 @@ public class GenerateProjectiles : MonoBehaviour
 {
     [SerializeField] Transform generator;
     [SerializeField] GameObject projectile;
-
+    [SerializeField] float m_NextProjectile;
 
     // Start is called before the first frame update
     void Start()

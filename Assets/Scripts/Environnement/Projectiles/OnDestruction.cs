@@ -32,13 +32,11 @@ public class OnDestruction : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Plateforme") || other.gameObject.CompareTag("Decor"))
         {
-
-            Debug.Log(gameObject.name);
-            Debug.Log("Yes sir BIG BOOM");
             ParticleSystem newParticule = Instantiate(m_particule, gameObject.transform.position, Quaternion.identity);
+
             newParticule.transform.localScale = new Vector3(1f, 1f, 1f); 
             newParticule.Play();
-            
+
             Destroy(newParticule.gameObject,2f);
             Destroy(transform.parent.gameObject);
         }
