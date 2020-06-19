@@ -53,12 +53,12 @@ public class PorteCouleur : MonoBehaviour
         }
     }
 
-    /*
+    
     private void OnTriggerStay(Collider other)
     {
         OnTriggerEnter(other);
     }
-    */
+    
 
     private void OnCollisionExit(Collision collision)
     {

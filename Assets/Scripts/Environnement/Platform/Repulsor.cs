@@ -40,6 +40,7 @@ public class Repulsor : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player") && !m_PlayerAffect)
             return;
-        other.gameObject.GetComponent<Rigidbody>().AddForce(vectRepulsion, ForceMode.Impulse);
+        other.gameObject.GetComponent<Rigidbody>().velocity=Vector3.zero;
+        other.gameObject.GetComponent<Rigidbody>().AddForce(vectRepulsion, ForceMode.VelocityChange);
     }
 }

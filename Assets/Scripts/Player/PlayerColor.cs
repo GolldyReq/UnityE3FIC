@@ -91,6 +91,14 @@ public class PlayerColor : IColorable
                 ChangeColorfusion("sky");
             if (haveColor("green") && haveColor("red"))
                 ChangeColorfusion("yellow");
+            if (haveColor("yellow") && haveColor("red"))
+                ChangeColorfusion("orange");
+            if (haveColor("yellow") && haveColor("sky"))
+                ChangeColorfusion("green");
+            if (haveColor("yellow") && haveColor("violet"))
+                ChangeColorfusion("red");
+            if (haveColor("sky") && haveColor("violet"))
+                ChangeColorfusion("blue");
             m_MeshRendererPlayer.materials = m_ListMaterialPlayer;
         }
     }
