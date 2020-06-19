@@ -123,6 +123,8 @@ public class Player : MonoBehaviour
         //Detection avec un objet qui tue le joueur
         if (collision.gameObject.CompareTag("Killable"))
         {
+            m_Life--;
+            HUDManager.Instance.UpdateNbLife(m_Life);
             m_Rigidbody.velocity = Vector3.zero;
             m_Rigidbody.isKinematic = true;
             m_Rigidbody.isKinematic = false;
