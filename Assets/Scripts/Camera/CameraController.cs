@@ -76,4 +76,14 @@ public class CameraController : MonoBehaviour
 
         }
     }
+
+    public void respawn()
+    {
+        gameObject.transform.position = m_InitialPosition;
+    }
+
+    public void setNewSpawnPos(Transform newPosition)
+    {
+        m_InitialPosition = newPosition.position;
+    }
 }

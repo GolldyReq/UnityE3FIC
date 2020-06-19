@@ -14,7 +14,7 @@ public class PlayerDebug : MonoBehaviour
     [Tooltip("La vitesse en m.s-1")]
     [SerializeField] float m_Speed;
 
-    [SerializeField] Transform camera;
+    [SerializeField] CameraDebug camera;
     private Vector3 m_InitialPos;
     private Vector3 m_InitialCameraPos;
 
@@ -44,7 +44,8 @@ public class PlayerDebug : MonoBehaviour
         m_OnGround = true;
         m_NextJump = Time.time;
         m_InitialPos = transform.position;
-        m_InitialCameraPos = camera.transform.position;
+        //m_InitialCameraPos = camera.transform.position;
+        camera.setNewSpawnPos(camera.transform);
     }
 
     private void Update()
@@ -65,7 +66,7 @@ public class PlayerDebug : MonoBehaviour
         Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
         movement = Vector3.ClampMagnitude(movement, 1);
         //Peut etre mis en commentaire pour changer le style
-        var actualDirection = camera.TransformDirection(movement);
+        var actualDirection = camera.transform.TransformDirection(movement);
         actualDirection.y = 0;
         //m_Rigidbody.AddForce(actualDirection * m_Speed * Time.fixedDeltaTime, ForceMode.VelocityChange);
         //m_PlayerSize.ChangeSize(this);
@@ -114,7 +115,8 @@ public class PlayerDebug : MonoBehaviour
             m_Rigidbody.isKinematic = true;
             m_Rigidbody.isKinematic = false;
             transform.position = m_InitialPos;
-            camera.position = m_InitialCameraPos;
+            //camera.position = m_InitialCameraPos;
+            camera.respawn();
         }
     }
     private void OnCollisionExit(Collision collision)
@@ -133,10 +135,30 @@ public class PlayerDebug : MonoBehaviour
             m_Rigidbody.isKinematic = true;
             m_Rigidbody.isKinematic = false;
             transform.position = m_InitialPos;
-            camera.position = m_InitialCameraPos;
+            //camera.position = m_InitialCameraPos;
+            camera.respawn();
+
         }
         //Trigger bloc de peinture modifiant la couleur du joueur
         if (other.gameObject.CompareTag("Paint"))
             m_PlayerColor.Paint(other.GetComponent<MeshRenderer>());
+
+        //Trigger checkpoint
+        if (other.gameObject.CompareTag("CheckPoint"))
+        {
+            Debug.Log(other.name);
+            Transform posPlayer = other.gameObject.transform.parent.Find("NewPosPlayer").gameObject.transform;
+            Transform posCamera = other.gameObject.transform.parent.Find("NewPosCamera").gameObject.transform;
+            //Debug.Log(posPlayer.position.ToString());
+            //Debug.Log(posCamera.position.ToString());
+            Debug.Log("Checkpoint atteint !");
+            setSpawnPosition(posPlayer, posCamera);
+        }
+    }
+
+    public void setSpawnPosition(Transform newSpawnPosition, Transform newCameraPosition)
+    {
+        this.m_InitialPos = newSpawnPosition.transform.position;
+        camera.setNewSpawnPos(newCameraPosition);
     }
 }

@@ -46,6 +46,11 @@ public class PorteCouleur : MonoBehaviour
                 }
             //}
         }
+        else
+        {
+            if (bc_door)
+                bc_door.isTrigger = false;
+        }
     }
 
     /*

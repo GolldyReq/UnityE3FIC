@@ -10,6 +10,8 @@ public class PlayerCollision
         bool IsPossibleToGrowUp = true ;
         RaycastHit hit;
         float taille_agrandissement = 1.2f;
+        if (player.m_PlayerSize.Size == PlayerSize.PLAYERSIZE.Small)
+            taille_agrandissement = 0.7f;
 
         //On verifie que le grandissement ne provoque pas de collision       
         //Verifier si le centre de la sphére va toucher 
@@ -38,6 +40,9 @@ public class PlayerCollision
         bool IsPossibleToGrowUp = true;
         RaycastHit hit;
         float taille_agrandissement = 1.2f;
+        if (player.m_PlayerSize.Size == PlayerSize.PLAYERSIZE.Small)
+            taille_agrandissement = 0.7f;
+
 
         //On verifie que le grandissement ne provoque pas de collision       
         //Verifier si le centre de la sphére va toucher 

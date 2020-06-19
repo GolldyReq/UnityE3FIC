@@ -21,7 +21,7 @@ public class MovingPlatform : MonoBehaviour
     [SerializeField] float m_Y;
     [Range(0, 10)]
     [SerializeField] float m_Z;
-
+    
     //private Vector3 m_BasePosition;
     //Valeur max dans le sens positif et negatif
     public Vector3 m_GoalPos;

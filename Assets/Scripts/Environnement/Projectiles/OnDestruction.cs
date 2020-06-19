@@ -10,22 +10,12 @@ public class OnDestruction : MonoBehaviour
     void Start()
     {
         //m_particule.Pause();
-        Debug.Log("Yes sir pause");
     }
 
     // Update is called once per frame
     void Update()
     {
         
-    }
-    private void DoEmit()
-    {
-        Debug.Log("Lancement particle");
-        var emitParams = new ParticleSystem.EmitParams();
-        emitParams.startColor = Color.red;
-        emitParams.startSize = 0.2f;
-        m_particule.Emit(emitParams, 10);
-        m_particule.Play();
     }
 
     private void OnCollisionEnter(Collision other)

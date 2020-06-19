@@ -9,8 +9,8 @@ public class LevelsManager : MonoBehaviour
 
     [SerializeField] GameObject[] m_Levels;
     GameObject m_CurrentLevel;
-    [SerializeField] GameObject m_Player;
-    [SerializeField] GameObject m_Camera;
+    [SerializeField] GameObject m_GO_Player;
+    [SerializeField] GameObject m_GO_Camera;
 
     public bool m_IsReady;
     public bool IsReady { get { return m_IsReady; } }
@@ -22,10 +22,17 @@ public class LevelsManager : MonoBehaviour
         m_CurrentLevel = Instantiate(m_Levels[level]);
         GameObject SpawnPlayer =GameObject.Find("PosSpawnPlayer");
         GameObject SpawnCamera =GameObject.Find("PosSpawnCamera");
-        m_Player.SetActive(true);
-        m_Player.GetComponent<Transform>().position= SpawnPlayer.transform.position;
-        Debug.Log("Player pos : " + m_Player.transform.position.ToString());
-        m_Camera.GetComponent<Transform>().position = SpawnCamera.transform.position;
+        m_GO_Player.SetActive(true);
+        m_GO_Player.GetComponent<Transform>().position= SpawnPlayer.transform.position;
+        Debug.Log("Player pos : " + m_GO_Player.transform.position.ToString());
+
+        m_GO_Camera.GetComponent<Transform>().position = SpawnCamera.transform.position;
+
+
+        //Change le point de Respawn et charge les parametres du joueur
+        m_GO_Player.GetComponent<Player>().setSpawnPosition(m_GO_Player.transform, m_GO_Camera.transform);
+        m_GO_Player.GetComponent<Player>().LoadPlayer(); 
+
         Destroy(SpawnPlayer);
         Destroy(SpawnCamera);
         StartCoroutine(TimerCoroutine.TimerChrono(.0d));
@@ -35,7 +42,7 @@ public class LevelsManager : MonoBehaviour
     {
         StopAllCoroutines();
         Destroy(m_CurrentLevel);
-        m_Player.SetActive(false);
+        m_GO_Player.SetActive(false);
     }
 
     void Awake()

@@ -18,12 +18,19 @@ public class TimerCoroutine : MonoBehaviour
     }
     public static IEnumerator TimerChrono(double Timer)
     {
+        Chrono chronometre = new Chrono();
         while (true)
         {
-            Timer = Math.Round(Timer + Time.deltaTime,2);
-            HUDManager.PrintChrono(Timer);
+            //Timer = Math.Round(Timer + Time.deltaTime,2);
+            Timer++;
+            chronometre.TotalTime = Timer;
+            chronometre.secondes = (int)Timer%60;
+            chronometre.minutes = (int)(Timer / 60)%60;
+            chronometre.heures = (int)(chronometre.minutes / 60);
+            
+            HUDManager.PrintChrono(chronometre.secondes, chronometre.minutes,chronometre.heures);
             yield return null;
-            //yield return new WaitForSeconds(0.02f);
+            yield return new WaitForSeconds(1f);
         }
     }
 }

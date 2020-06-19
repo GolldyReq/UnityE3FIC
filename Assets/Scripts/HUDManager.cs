@@ -95,9 +95,13 @@ public class HUDManager : MonoBehaviour
     {
         HUDManager.Instance.m_SpeedPlayer.text = speed.ToString() + " km/h";
     }
+
     public static void PrintChrono(double time)
     {
         HUDManager.Instance.m_TimerText.text = time.ToString();
     }
-
+    public static void PrintChrono(int s , int m, int h)
+    {
+        HUDManager.Instance.m_TimerText.text = h.ToString()+"h"+m.ToString()+"m"+s.ToString()+"s";
+    }
 }

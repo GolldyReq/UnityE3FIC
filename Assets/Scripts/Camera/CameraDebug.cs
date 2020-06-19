@@ -70,9 +70,16 @@ public class CameraDebug : MonoBehaviour
                 m_height = .5f;
             if (m_height > 2.5f)
                 m_height = 2.5f;
-
-
-
         }
+    }
+
+    public void respawn()
+    {
+        gameObject.transform.position = m_InitialPosition;
+    }
+
+    public void setNewSpawnPos(Transform newPosition)
+    {
+        m_InitialPosition = newPosition.position;
     }
 }

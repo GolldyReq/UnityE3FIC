@@ -14,9 +14,9 @@ public class Player : MonoBehaviour
     public float Speed { get { return this.m_Speed; } set { this.m_Speed = value; } }
     private Vector3 m_LastPosition;
 
-    [SerializeField] Transform camera;
+    [SerializeField] CameraController camera;
     private Vector3 m_InitialPos;
-    private Vector3 m_InitialCameraPos;
+    //private Vector3 m_InitialCameraPos;
 
     [Header("Puissance du saut")]
     [SerializeField] float m_Jump;
@@ -28,13 +28,21 @@ public class Player : MonoBehaviour
     public PlayerColor m_PlayerColor;
     //public PlayerMass m_PlayerMass;
 
+    public void LoadPlayer()
+    {
+        m_Life = GameManager.Instance.m_Life;
+
+        m_PlayerSize = new PlayerSize();
+        m_PlayerColor = new PlayerColor(this);
+    }
 
     private void Awake()
     {
         m_Rigidbody = GetComponentInChildren<Rigidbody>();
-        m_Life = GameManager.Instance.m_Life;
-        m_PlayerSize = new PlayerSize();
-        m_PlayerColor = new PlayerColor(this);
+        //m_Life = GameManager.Instance.m_Life;
+        LoadPlayer();
+        //m_PlayerSize = new PlayerSize();
+        //m_PlayerColor = new PlayerColor(this);
         //m_PlayerColor = new PlayerColor(this,"blue");
         //m_PlayerColor = new PlayerColor(this,"red","yellow");
     }
@@ -45,14 +53,14 @@ public class Player : MonoBehaviour
         m_OnGround = false;
         m_NextJump = Time.time;
         m_InitialPos = transform.position;
-        m_InitialCameraPos = camera.transform.position;
+        //m_InitialCameraPos = camera.transform.position;
         m_LastPosition = transform.position;
     }
 
     private void Update()
     {
         //Changement de taille
-        m_PlayerSize.ChangeSize(this);
+        //m_PlayerSize.ChangeSize(this);
     }
 
     private void FixedUpdate()
@@ -68,7 +76,7 @@ public class Player : MonoBehaviour
         Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
         movement = Vector3.ClampMagnitude(movement, 1);
         //Peut etre mis en commentaire pour changer le style
-        var actualDirection = camera.TransformDirection(movement);
+        var actualDirection = camera.gameObject.transform.TransformDirection(movement);
         actualDirection.y = 0;
 
         //Si au sol : Mouvement sinon Limiter le "air-control"
@@ -78,7 +86,7 @@ public class Player : MonoBehaviour
             m_Rigidbody.AddForce((0.75f * actualDirection * m_Speed * Time.fixedDeltaTime), ForceMode.VelocityChange);
 
         //Changement de taille
-        //m_PlayerSize.ChangeSize(this);
+        m_PlayerSize.ChangeSize(this);
 
         //Calcul de la vitesse
         int vitesse = Convert.ToInt32((transform.position - m_LastPosition).magnitude/Time.fixedDeltaTime);
@@ -99,7 +107,6 @@ public class Player : MonoBehaviour
         //fusion couleur
         if (Input.GetButton("Fusion"))
             m_PlayerColor.FusionColor();
-
      }
     
     //Gestion des collisions
@@ -112,6 +119,18 @@ public class Player : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Plateforme") || collision.gameObject.CompareTag("Decor"))
             m_OnGround = true;
+
+        //Detection avec un objet qui tue le joueur
+        if (collision.gameObject.CompareTag("Killable"))
+        {
+            m_Rigidbody.velocity = Vector3.zero;
+            m_Rigidbody.isKinematic = true;
+            m_Rigidbody.isKinematic = false;
+            transform.position = m_InitialPos;
+            //camera.transform.position = m_InitialCameraPos;
+            camera.respawn();
+        }
+
     }
     private void OnCollisionExit(Collision collision)
     {
@@ -133,7 +152,8 @@ public class Player : MonoBehaviour
                 m_Rigidbody.isKinematic = true;
                 m_Rigidbody.isKinematic = false;
                 transform.position = m_InitialPos;
-                camera.position = m_InitialCameraPos;
+                //camera.position = m_InitialCameraPos;
+                camera.respawn();
             }
             else
                 MenuManager.Instance.GameOver();
@@ -145,5 +165,11 @@ public class Player : MonoBehaviour
     private void OnEnable()
     {
         m_Life = GameManager.Instance.Life;
+    }
+
+    public void setSpawnPosition(Transform newSpawnPosition , Transform newCameraPosition)
+    {
+        this.m_InitialPos = newSpawnPosition.transform.position;
+        camera.setNewSpawnPos(newCameraPosition);
     }
 }
