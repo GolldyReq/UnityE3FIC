@@ -1,33 +1,23 @@
-﻿Shader "Unlit/VerreShader"
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "Unlit/VerreShader"
 {
 	Properties{
-		 _SpecColor("Specular Color", Color) = (0.5, 0.5, 0.5, 1)
-		 _Shininess("Shininess", Range(0.01, 1)) = 0.078125
+		_Color("Main Color", Color) = (1,1,1,1)
+		_MainTex("Base (RGB) Trans (A)", 2D) = "white" {}
 	}
 		SubShader{
-			Tags {
-				"Queue" = "Transparent"
-				"IgnoreProjector" = "True"
-				"RenderType" = "Transparent"
-			}
-			LOD 300
+			Tags {"Queue" = "Transparent" "IgnoreProjector" = "True" "RenderType" = "Transparent"}
+			LOD 200
 
-			CGPROGRAM
-				#pragma surface surf BlinnPhong decal:add nolightmap
+		// extra pass that renders to depth buffer only
+		Pass {
+			ZWrite Off
+			ColorMask 0
+		}
 
-				half _Shininess;
-
-				struct Input {
-					float dummy;
-				};
-
-				void surf(Input IN, inout SurfaceOutput o) {
-					o.Albedo = 0;
-					o.Gloss = 1;
-					o.Specular = _Shininess;
-					o.Alpha = 0;
-				}
-			ENDCG
+		// paste in forward rendering passes from Transparent/Diffuse
+		UsePass "Transparent/Diffuse/FORWARD"
 	}
-		FallBack "Transparent/VertexLit"
+		Fallback "Transparent/VertexLit"
 }
