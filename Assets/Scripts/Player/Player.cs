@@ -174,4 +174,10 @@ public class Player : MonoBehaviour
         this.m_InitialPos = newSpawnPosition.transform.position;
         camera.setNewSpawnPos(newCameraPosition);
     }
+
+    public void Teleport(Transform newPlayerPos, Transform newCameraPos)
+    {
+        transform.position = newPlayerPos.position;
+        camera.transform.position = newCameraPos.position;
+    }
 }

@@ -9,7 +9,7 @@ public class Trou : MonoBehaviour
     private bool m_IsRempli;
 
     [Tooltip("Point de respawn si ce n'est pas la bonne boule qui rentre")]
-    [SerializeField] GameObject m_Respawn;
+    [SerializeField] Transform m_Respawn;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,10 +26,15 @@ public class Trou : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Boule") || other.gameObject.CompareTag("Killable"))
         {
             if (m_Cible == null)
                 m_IsRempli = true;
+            else
+            {
+                if (other.transform.name != m_Cible.name)
+                    other.gameObject.transform.position = m_Respawn.position;
+            }
         }
     }
 
