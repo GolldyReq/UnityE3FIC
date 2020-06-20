@@ -34,15 +34,13 @@ public class Trou : MonoBehaviour
             {
                 if (other.transform.name != m_Cible.name)
                     other.gameObject.transform.position = m_Respawn.position;
+                else
+                    m_IsRempli = true;
             }
         }
     }
 
-    private void OnTriggerExit(Collider other)
-    {
-        m_IsRempli = false;
-    }
-
+  
     public bool IsRempli()
     {
         return m_IsRempli;

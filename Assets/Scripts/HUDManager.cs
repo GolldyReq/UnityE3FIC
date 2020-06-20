@@ -68,8 +68,11 @@ public class HUDManager : MonoBehaviour
 
     public static void PrintHelpText(string msg)
     {
+        if (HUDManager.Instance.m_HelpText.text != "")
+            HUDManager.EraseHelpText();
         HUDManager.Instance.m_HelpText.text = msg;
     }
+
     public static void EraseHelpText()
     {
         HUDManager.Instance.m_HelpText.text = "";
@@ -103,5 +106,14 @@ public class HUDManager : MonoBehaviour
     public static void PrintChrono(int s , int m, int h)
     {
         HUDManager.Instance.m_TimerText.text = h.ToString()+"h"+m.ToString()+"m"+s.ToString()+"s";
+    }
+
+    public static IEnumerator PrintMessageForSecondes(string msg , float duree)
+    {
+        HUDManager.PrintHelpText(msg);
+        yield return new WaitForSeconds(duree);
+        HUDManager.EraseHelpText();
+
+       
     }
 }

@@ -32,14 +32,14 @@ public class PlayerSize
             {
                 Size = PLAYERSIZE.Normal;
                 player.StartCoroutine(ScaleCoroutine.RescaleAnimation(player));
-                player.Speed = 20;
+                player.Speed = 15;
             }
 
             if (Input.GetButton("Small") && m_Size == PLAYERSIZE.Normal)
             {
                 Size = PLAYERSIZE.Small;
                 player.StartCoroutine(ScaleCoroutine.RescaleAnimation(player));
-                player.Speed = 25;
+                player.Speed = 20;
             }
 
             if (Input.GetButton("Big") && PlayerCollision.CanPlayerChangeSize(player) && m_Size == PLAYERSIZE.Normal)
@@ -47,6 +47,7 @@ public class PlayerSize
                 Size = PLAYERSIZE.Big;
                 player.StartCoroutine(ScaleCoroutine.RescaleAnimation(player));
                 player.Speed = 15;
+                
             }
         }
     }

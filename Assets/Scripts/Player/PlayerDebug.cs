@@ -83,7 +83,6 @@ public class PlayerDebug : MonoBehaviour
         bool Is_Jumped = Input.GetButton("Saut");
         if (Is_Jumped && m_OnGround && Time.time > m_NextJump)
         {
-            Debug.Log("Saut");
             m_Rigidbody.AddForce(Vector3.up * m_Jump * Time.fixedDeltaTime, ForceMode.Impulse);
             //m_Rigidbody.AddForce(Vector3.up *m_Jump* Time.fixedDeltaTime, ForceMode.VelocityChange);
             m_OnGround = false;
@@ -146,7 +145,6 @@ public class PlayerDebug : MonoBehaviour
         //Trigger checkpoint
         if (other.gameObject.CompareTag("CheckPoint"))
         {
-            Debug.Log(other.name);
             Transform posPlayer = other.gameObject.transform.parent.Find("NewPosPlayer").gameObject.transform;
             Transform posCamera = other.gameObject.transform.parent.Find("NewPosCamera").gameObject.transform;
             //Debug.Log(posPlayer.position.ToString());

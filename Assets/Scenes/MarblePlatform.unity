@@ -487,7 +487,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Levels:
-  - {fileID: 8456066588227390681, guid: d132af2adc91db24db40dfe416a45774, type: 3}
+  - {fileID: 4314616095539650703, guid: dfe3d897bcd62ab4ca293aa33aca4d34, type: 3}
   - {fileID: 6769389157020184199, guid: de1a12f2cbacb644697890d59b342872, type: 3}
   - {fileID: 7080848963996770395, guid: 5fbb1675e08119d4cb11c447f69d160c, type: 3}
   m_GO_Player: {fileID: 1958499414}
@@ -1030,7 +1030,12 @@ PrefabInstance:
     - target: {fileID: 481969021210910899, guid: 27685ce1ce099eb4a86630ab17e00e9b,
         type: 3}
       propertyPath: m_Jump
-      value: 500
+      value: 350
+      objectReference: {fileID: 0}
+    - target: {fileID: 481969021210910899, guid: 27685ce1ce099eb4a86630ab17e00e9b,
+        type: 3}
+      propertyPath: m_Speed
+      value: 15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 27685ce1ce099eb4a86630ab17e00e9b, type: 3}

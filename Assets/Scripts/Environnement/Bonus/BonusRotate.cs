@@ -10,6 +10,7 @@ public class BonusRotate : MonoBehaviour
     [SerializeField] bool m_RotateOnY;
     [SerializeField] bool m_RotateOnZ;
 
+    [SerializeField] GameObject[] m_DestroyObject;
     // Start is called before the first frame update
     void Start()
     {
@@ -37,8 +38,16 @@ public class BonusRotate : MonoBehaviour
             newParticule.Play();
 
             Destroy(newParticule.gameObject, 2f);
-            Destroy(gameObject);
-            
+            if (m_DestroyObject.Length==0)
+                Destroy(gameObject);
+            else
+            {
+
+                for(int i = 0; i<m_DestroyObject.Length;i++)
+                {
+                    Destroy(m_DestroyObject[i]);
+                }
+            }
         }
     }
 }

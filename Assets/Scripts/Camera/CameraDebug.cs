@@ -70,6 +70,16 @@ public class CameraDebug : MonoBehaviour
                 m_height = .5f;
             if (m_height > 2.5f)
                 m_height = 2.5f;
+
+            float Dezoom = Input.GetAxis("Dezoom");
+            float Zoom = Input.GetAxis("Zoom");
+            m_Distance = m_Distance - Dezoom / 100;
+            if (m_Distance < 2)
+                m_Distance = 2;
+            m_Distance = m_Distance + Zoom / 100;
+            if (m_Distance > 6)
+                m_Distance = 6;
+
         }
     }
 

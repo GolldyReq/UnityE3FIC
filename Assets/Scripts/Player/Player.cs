@@ -163,6 +163,16 @@ public class Player : MonoBehaviour
         //Trigger bloc de peinture modifiant la couleur du joueur
         if (other.gameObject.CompareTag("Paint"))
             m_PlayerColor.Paint(other.GetComponent<MeshRenderer>());
+
+        //Trigger checkpoint
+        if (other.gameObject.CompareTag("CheckPoint"))
+        {
+            Transform posPlayer = other.gameObject.transform.parent.Find("NewPosPlayer").gameObject.transform;
+            Transform posCamera = other.gameObject.transform.parent.Find("NewPosCamera").gameObject.transform;
+            //Debug.Log("Checkpoint atteint !");
+            StartCoroutine(HUDManager.PrintMessageForSecondes("Checkpoint pris !", 2f));
+            setSpawnPosition(posPlayer, posCamera);
+        }
     }
     private void OnEnable()
     {
