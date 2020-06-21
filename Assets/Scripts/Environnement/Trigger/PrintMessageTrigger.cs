@@ -26,6 +26,7 @@ public class PrintMessageTrigger : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        Debug.Log("On trigger");
         if (other.gameObject.CompareTag("Player"))
         {
             //Affichage message

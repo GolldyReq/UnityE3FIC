@@ -9,6 +9,9 @@ public class de : MonoBehaviour
     [SerializeField] GameObject m_de1;
     [SerializeField] GameObject m_de2;
     [SerializeField] GameObject m_de3;
+    [SerializeField] GameObject m_portail;
+
+    [SerializeField] GameObject m_imprimante;
     // Start is called before the first frame update
     void Start()
     {
@@ -42,12 +45,14 @@ public class de : MonoBehaviour
                 m_text.text = (int.Parse(m_text.text) + 1).ToString() ;
             }
 
-             if (m_de1.GetComponentInChildren<TextMesh>().text == "1"  &&     //Verifier qu'on a les bon dee //5
-            m_de2.GetComponentInChildren<TextMesh>().text == "1" &&   //3
+             if (m_de1.GetComponentInChildren<TextMesh>().text == "5"  &&     //Verifier qu'on a les bon dee 
+            m_de2.GetComponentInChildren<TextMesh>().text == "3" &&   
             m_de3.GetComponentInChildren<TextMesh>().text == "1") 
             {
             Debug.Log(" Bon ");    
-                monPapier.imprimer();
+                 MeshRenderer m_MrPapier = m_imprimante.GetComponent<MeshRenderer>(); 
+                m_MrPapier.material = (Material)Resources.Load("Materials/Imprimante/papier_imp", typeof(Material));
+                m_portail.SetActive(true);
             }
             else {
                 Debug.Log(" PAs Bon "); 
