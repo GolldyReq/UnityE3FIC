@@ -46,6 +46,8 @@ public class LevelsManager : MonoBehaviour
             Destroy(m_CurrentLevel);
         m_GO_Player.SetActive(false);
         HUDManager.Instance.m_TimeChrono = 0;
+        m_GO_Player.GetComponent<Player>().GetComponent<Rigidbody>().isKinematic = true;
+        m_GO_Player.GetComponent<Player>().GetComponent<Rigidbody>().isKinematic = false;
     }
 
     void Awake()
