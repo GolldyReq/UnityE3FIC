@@ -4,10 +4,15 @@ using UnityEngine;
 
 public class de : MonoBehaviour
 {
+        papier monPapier ; 
+
+    [SerializeField] GameObject m_de1;
+    [SerializeField] GameObject m_de2;
+    [SerializeField] GameObject m_de3;
     // Start is called before the first frame update
     void Start()
     {
-        
+      //  monPapier = papier.Instantiate ;
     }
 
     // Update is called once per frame
@@ -36,6 +41,18 @@ public class de : MonoBehaviour
             {               
                 m_text.text = (int.Parse(m_text.text) + 1).ToString() ;
             }
+
+             if (m_de1.GetComponentInChildren<TextMesh>().text == "1"  &&     //Verifier qu'on a les bon dee //5
+            m_de2.GetComponentInChildren<TextMesh>().text == "1" &&   //3
+            m_de3.GetComponentInChildren<TextMesh>().text == "1") 
+            {
+            Debug.Log(" Bon ");    
+                monPapier.imprimer();
+            }
+            else {
+                Debug.Log(" PAs Bon "); 
+            }
+
 
 
         }
