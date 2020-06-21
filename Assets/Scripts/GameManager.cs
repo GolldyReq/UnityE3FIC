@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     public static GameManager m_Instance;
     public static GameManager Instance { get { return m_Instance; } }
 
-    public enum GAMESTATE { Menu,Play,Pause,Victory,GameOver }
+    public enum GAMESTATE { Menu,Play,Pause,Victory,GameOver,Credit }
     GAMESTATE m_State;
 
     int m_Level;
@@ -46,6 +46,16 @@ public class GameManager : MonoBehaviour
         else
             Destroy(gameObject);
     }
+
+
+    void Update()
+    {
+        if (Input.GetButton("Pause"))
+            ChangeState(GAMESTATE.Pause);
+        
+    }
+
+
     // Start is called before the first frame update
     IEnumerator Start()
     {
@@ -60,18 +70,38 @@ public class GameManager : MonoBehaviour
         MenuManager.Instance.OnGameOver += GameOver;
         MenuManager.Instance.OnReplayButton += ReplayButton;
         MenuManager.Instance.OnNextLevelButton += NextLevelButton;
-        MenuManager.Instance.OnExitButton += ExitButton;
+        MenuManager.Instance.OnContinueButton += ContinueButton;
+        MenuManager.Instance.OnCreditButton += CreditButton;
+        MenuManager.Instance.OnMenuButton += MenuButton;
 
         ChangeState(GAMESTATE.Menu);
-        m_Level = 0;
-
     }
 
+    private void ResetStat()
+    {
+        m_Level = 0;
+        m_Score = 0;
+        m_Life = 5;
+        HUDManager.Instance.ResetStat();
+        HUDManager.Instance.UpdateNbScore(m_Score);
+        HUDManager.Instance.UpdateNbLife(m_Life);
+    }
+
+    //Sauvegarde le score du joueur a chaque Checkpoint/Fin de partie/Game Over
+    public static void SaveScore()
+    {
+        if(!PlayerPrefs.HasKey("BestScore"))
+            PlayerPrefs.SetInt("BestScore", GameManager.Instance.m_Score);
+        else
+        {
+            if (PlayerPrefs.GetInt("BestScore") < GameManager.Instance.m_Score)
+                PlayerPrefs.SetInt("BestScore", GameManager.Instance.m_Score); 
+        }
+    }
 
     void PlayButtonHasBeenClicked()
     {
-        m_Life = 3;
-        m_Score = 0;
+        ResetStat();
         if (OnGameStatisticsChange != null) { HUDManager.Instance.UpdateNbLife(m_Life); HUDManager.Instance.UpdateNbScore(m_Score); }
         ChangeState(GAMESTATE.Play);
         LoadingLevel(m_Level);
@@ -90,41 +120,60 @@ public class GameManager : MonoBehaviour
 
     void LevelFinish()
     {
+        //Recompense le joueur s'il finit le niveau en moins de 15 min (+ il est rapide + il a de points)
+        if (900 - HUDManager.Instance.m_TimeChrono > 0)
+        {
+            m_Score = m_Score + (900 - HUDManager.Instance.m_TimeChrono) * 100;
+            HUDManager.Instance.UpdateNbScore(m_Score);
+        }
+        SaveScore();
+        HUDManager.Instance.VictoryPrintFinalScore();
         ChangeState(GAMESTATE.Victory);
+        AudioManager.StopAll();
+        AudioManager.Play("Win");
+        DestroyLevel();
     }
 
     void GameOver()
     {
+        SaveScore();
         ChangeState(GAMESTATE.GameOver);
-        m_Score = 0;
-        m_Life = 3;
-        HUDManager.Instance.UpdateNbScore(m_Score);
+        //HUDManager.Instance.UpdateNbScore(m_Score);
+        AudioManager.StopAll();
+        AudioManager.Play("GameOver");
+        HUDManager.Instance.GameOverPrintFinalScore();
+        DestroyLevel();
 
     }
 
     void ReplayButton()
     {
-        m_Life = 3;
-        HUDManager.Instance.UpdateNbLife(m_Life);
+        ResetStat();
         ChangeState(GAMESTATE.Play);
-        DestroyLevel();
         LoadingLevel(m_Level);
     }
 
     void NextLevelButton()
     {
         ChangeState(GAMESTATE.Play);
-        //A remplacer par la commande en commentaire
-        DestroyLevel();
         m_Level++;
         LoadingLevel(m_Level);
-        //LoadingNextLevel(m_Level);
     }
 
-    void ExitButton()
+    void ContinueButton()
     {
-        ChangeState(GAMESTATE.Menu);
-        DestroyLevel();
+        ChangeState(GAMESTATE.Play);
     }
 
+    void CreditButton()
+    {
+        ChangeState(GAMESTATE.Credit);
+    }
+
+    void MenuButton()
+    {
+        AudioManager.StopAll();
+        DestroyLevel();
+        ChangeState(GAMESTATE.Menu);
+    }
 }

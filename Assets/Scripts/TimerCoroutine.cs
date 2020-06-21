@@ -19,6 +19,7 @@ public class TimerCoroutine : MonoBehaviour
     public static IEnumerator TimerChrono(double Timer)
     {
         Chrono chronometre = new Chrono();
+        //while (GameManager.Instance.m_state != GameManager.GAMESTATE.Victory)
         while (true)
         {
             //Timer = Math.Round(Timer + Time.deltaTime,2);
@@ -29,7 +30,8 @@ public class TimerCoroutine : MonoBehaviour
             chronometre.heures = (int)(chronometre.minutes / 60);
             
             HUDManager.PrintChrono(chronometre.secondes, chronometre.minutes,chronometre.heures);
-            yield return null;
+            HUDManager.AddTime(chronometre.TotalTime);
+            //yield return null;
             yield return new WaitForSeconds(1f);
         }
     }

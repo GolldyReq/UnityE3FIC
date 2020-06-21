@@ -17,6 +17,8 @@ public class MenuManager : MonoBehaviour
     [SerializeField] GameObject m_VictoryPanel;
     [SerializeField] GameObject m_GameOverPanel;
     [SerializeField] GameObject m_PlayPanel;
+    [SerializeField] GameObject m_PausePanel;
+    [SerializeField] GameObject m_CreditPanel;
 
     List<GameObject> m_Panels = new List<GameObject>();
 
@@ -27,11 +29,11 @@ public class MenuManager : MonoBehaviour
 
     public event Action OnReplayButton;
     public event Action OnNextLevelButton;
-    public event Action OnExitButton;
-
-
+    public event Action OnMenuButton;
+    public event Action OnContinueButton;
     public event Action OnLevelFinish;
     public event Action OnGameOver;
+    public event Action OnCreditButton;
 
     private void ActivatePannel(GameObject pannel)
     {
@@ -58,6 +60,14 @@ public class MenuManager : MonoBehaviour
                 ActivatePannel(m_GameOverPanel);
                 eventSystem.SetSelectedGameObject(GameObject.Find("ExitButton"));
                 break;
+            case GameManager.GAMESTATE.Pause:
+                ActivatePannel(m_PausePanel);
+                eventSystem.SetSelectedGameObject(GameObject.Find("ContinueButton"));
+                break;
+            case GameManager.GAMESTATE.Credit:
+                ActivatePannel(m_CreditPanel);
+                eventSystem.SetSelectedGameObject(GameObject.Find("ToMenuButton"));
+                break;
         }
     }
 
@@ -69,13 +79,13 @@ public class MenuManager : MonoBehaviour
             m_Instance = this;
         else
             Destroy(gameObject);
-
-        Debug.Log(m_MenuPanel.name);
         
         m_Panels.Add(m_MenuPanel);
         m_Panels.Add(m_VictoryPanel);
         m_Panels.Add(m_GameOverPanel);
         m_Panels.Add(m_PlayPanel);
+        m_Panels.Add(m_PausePanel);
+        m_Panels.Add(m_CreditPanel);
 
         eventSystem = GameObject.FindObjectOfType<EventSystem>();
         
@@ -113,8 +123,18 @@ public class MenuManager : MonoBehaviour
         if (OnNextLevelButton != null) OnNextLevelButton();
     }
 
-    public void ExitButton()
+    public void ContinueButton()
     {
-        if (OnExitButton != null) OnExitButton();
+        if (OnContinueButton != null) OnContinueButton();
+    }
+    
+    public void CreditButton()
+    {
+        if (OnCreditButton != null) OnCreditButton();
+    }
+
+    public void MenuButton()
+    {
+        if (OnMenuButton != null) OnMenuButton();
     }
 }

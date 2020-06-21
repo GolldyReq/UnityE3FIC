@@ -4,11 +4,18 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
+    public static AudioManager m_Instance;
+    public static AudioManager Instance { get { return m_Instance; } }
+
     public Sound[] sons;
 
     void Awake()
     {
-        foreach(Sound s in sons)
+        if (m_Instance == null)
+            m_Instance = this;
+        else
+            Destroy(gameObject);
+        foreach (Sound s in sons)
         {
             s.source = gameObject.AddComponent<AudioSource>();
             s.source.clip = s.clip;
@@ -18,19 +25,22 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    private void Start()
+    public static void Play(string nom)
     {
-        Play("Theme");
-    }
-
-    public void Play(string nom)
-    {
-        Sound s = Array.Find(sons, son => son.nom == nom);
+        Sound s = Array.Find(AudioManager.m_Instance.sons, son => son.nom == nom);
         if (s == null)
         {
             Debug.LogWarning("Son : " + nom +" n'a pas été trouvé");
             return;
         }
         s.source.Play();
-    }   
+    }
+    
+    public static void StopAll()
+    {
+        foreach(Sound son in AudioManager.m_Instance.sons)
+        {
+            son.source.Stop();
+        }
+    }
 }

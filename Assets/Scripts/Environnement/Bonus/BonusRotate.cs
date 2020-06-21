@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class BonusRotate : MonoBehaviour
 {
+
+    [SerializeField] int m_Score;
     [SerializeField] ParticleSystem m_particule;
 
     [SerializeField] bool m_RotateOnX;
@@ -36,13 +38,13 @@ public class BonusRotate : MonoBehaviour
 
             newParticule.transform.localScale = new Vector3(1f, 1f, 1f);
             newParticule.Play();
-
+            AudioManager.Play("PickUp");
+            HUDManager.Instance.UpdateNbScore(m_Score);
             Destroy(newParticule.gameObject, 2f);
             if (m_DestroyObject.Length==0)
                 Destroy(gameObject);
             else
             {
-
                 for(int i = 0; i<m_DestroyObject.Length;i++)
                 {
                     Destroy(m_DestroyObject[i]);

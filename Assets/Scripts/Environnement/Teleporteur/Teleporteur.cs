@@ -31,7 +31,6 @@ public class Teleporteur : MonoBehaviour
                 camera = GameObject.Find("CameraDebug");
             collider.gameObject.transform.parent.GetComponent<Rigidbody>().velocity = Vector3.zero;
             collider.gameObject.transform.parent.position = m_PlayerPosTeleport.position;
-            Debug.Log(camera.name);
             camera.transform.position = m_CameraPosTeleport.position;
         }
     }

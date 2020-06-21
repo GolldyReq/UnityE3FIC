@@ -14,8 +14,7 @@ public class Trou : MonoBehaviour
     void Start()
     {
         m_IsRempli = false;
-        if (m_Cible == null)
-            Debug.Log("Pas de cible");
+
     }
 
     // Update is called once per frame

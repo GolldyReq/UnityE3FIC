@@ -24,8 +24,6 @@ public class LevelsManager : MonoBehaviour
         GameObject SpawnCamera =GameObject.Find("PosSpawnCamera");
         m_GO_Player.SetActive(true);
         m_GO_Player.GetComponent<Transform>().position= SpawnPlayer.transform.position;
-        Debug.Log("Player pos : " + m_GO_Player.transform.position.ToString());
-
         m_GO_Camera.GetComponent<Transform>().position = SpawnCamera.transform.position;
 
 
@@ -36,13 +34,18 @@ public class LevelsManager : MonoBehaviour
         Destroy(SpawnPlayer);
         Destroy(SpawnCamera);
         StartCoroutine(TimerCoroutine.TimerChrono(.0d));
+        AudioManager.StopAll();
+        AudioManager.Play("Theme");
+        HUDManager.Instance.m_TimeChrono = 0;
     }
 
     void DestroyLevel(int level)
     {
         StopAllCoroutines();
-        Destroy(m_CurrentLevel);
+        if(m_CurrentLevel!=null)
+            Destroy(m_CurrentLevel);
         m_GO_Player.SetActive(false);
+        HUDManager.Instance.m_TimeChrono = 0;
     }
 
     void Awake()

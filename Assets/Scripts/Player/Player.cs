@@ -65,7 +65,7 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!GameManager.Instance.IsPlaying) return;
+        if (!GameManager.Instance.IsPlaying) return; 
         
         //Mouvement
         //Recuperation valeur Joystick
@@ -102,6 +102,7 @@ public class Player : MonoBehaviour
             //m_Rigidbody.AddForce(Vector3.up *m_Jump* Time.fixedDeltaTime, ForceMode.VelocityChange);
             m_OnGround = false;
             m_NextJump = Time.time + m_JumpCooldown;
+            AudioManager.Play("Saut");
         }
 
         //fusion couleur
@@ -122,16 +123,7 @@ public class Player : MonoBehaviour
 
         //Detection avec un objet qui tue le joueur
         if (collision.gameObject.CompareTag("Killable"))
-        {
-            m_Life--;
-            HUDManager.Instance.UpdateNbLife(m_Life);
-            m_Rigidbody.velocity = Vector3.zero;
-            m_Rigidbody.isKinematic = true;
-            m_Rigidbody.isKinematic = false;
-            transform.position = m_InitialPos;
-            //camera.transform.position = m_InitialCameraPos;
-            camera.respawn();
-        }
+            Death();
 
     }
     private void OnCollisionExit(Collision collision)
@@ -145,21 +137,7 @@ public class Player : MonoBehaviour
     {
         //Trigger tuant le player
         if (other.gameObject.CompareTag("Killable"))
-        {
-            if (m_Life > 1)
-            {
-                m_Life--;
-                HUDManager.Instance.UpdateNbLife(m_Life);
-                m_Rigidbody.velocity = Vector3.zero;
-                m_Rigidbody.isKinematic = true;
-                m_Rigidbody.isKinematic = false;
-                transform.position = m_InitialPos;
-                //camera.position = m_InitialCameraPos;
-                camera.respawn();
-            }
-            else
-                MenuManager.Instance.GameOver();
-        }
+            Death();
         //Trigger bloc de peinture modifiant la couleur du joueur
         if (other.gameObject.CompareTag("Paint"))
             m_PlayerColor.Paint(other.GetComponent<MeshRenderer>());
@@ -170,13 +148,32 @@ public class Player : MonoBehaviour
             Transform posPlayer = other.gameObject.transform.parent.Find("NewPosPlayer").gameObject.transform;
             Transform posCamera = other.gameObject.transform.parent.Find("NewPosCamera").gameObject.transform;
             //Debug.Log("Checkpoint atteint !");
-            StartCoroutine(HUDManager.PrintMessageForSecondes("Checkpoint pris !", 2f));
+            StartCoroutine(HUDManager.PrintMessageForSecondes("Checkpoint pris !", 1f));
             setSpawnPosition(posPlayer, posCamera);
+            AudioManager.Play("CheckPoint");
+            GameManager.SaveScore();
         }
     }
     private void OnEnable()
     {
         m_Life = GameManager.Instance.Life;
+    }
+
+    private void Death()
+    {
+        if (m_Life > 1)
+        {
+            m_Life--;
+            HUDManager.Instance.UpdateNbLife(m_Life);
+            m_Rigidbody.velocity = Vector3.zero;
+            m_Rigidbody.isKinematic = true;
+            m_Rigidbody.isKinematic = false;
+            transform.position = m_InitialPos;
+            camera.respawn();
+            AudioManager.Play("LoseHearth");
+        }
+        else
+            MenuManager.Instance.GameOver();
     }
 
     public void setSpawnPosition(Transform newSpawnPosition , Transform newCameraPosition)
@@ -189,5 +186,11 @@ public class Player : MonoBehaviour
     {
         transform.position = newPlayerPos.position;
         camera.transform.position = newCameraPos.position;
+    }
+
+    public void GetHearth()
+    {
+        m_Life++;
+        HUDManager.Instance.UpdateNbLife(m_Life);
     }
 }

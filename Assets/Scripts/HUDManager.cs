@@ -20,11 +20,20 @@ public class HUDManager : MonoBehaviour
     [SerializeField] Image m_XboxButton;
     [SerializeField] Image m_PsButton;
 
+    [SerializeField] Text GameOverFinalScore;
+    [SerializeField] Text GameOverBestScore;
+
+    [SerializeField] Text VictoryFinalScore;
+    [SerializeField] Text VictoryBestScore;
+
+
     private Player player;
 
     public int m_Score;
     public int m_Life;
     public int Score { get { return m_Score; } set { this.m_Score = Score; } }
+
+    public int m_TimeChrono;
 
 
 
@@ -40,6 +49,32 @@ public class HUDManager : MonoBehaviour
         m_Score += nScore;
         GameManager.Instance.m_Score = m_Score;
         m_NbScoreText.text = "Score : " + m_Score;
+    }
+
+    public void GameOverPrintFinalScore()
+    {
+        GameOverFinalScore.text = "Your score : " + m_Score;
+        if (!PlayerPrefs.HasKey("BestScore"))
+            GameOverBestScore.text = "Best Score : " + m_Score;
+        else
+            GameOverBestScore.text = "Best Score : " + PlayerPrefs.GetInt("BestScore");
+    }
+
+    public void VictoryPrintFinalScore()
+    {
+        VictoryFinalScore.text = "Your score : " + m_Score;
+        if (!PlayerPrefs.HasKey("BestScore"))
+            VictoryBestScore.text = "Best Score : " + m_Score;
+        else
+            VictoryBestScore.text = "Best Score : " + PlayerPrefs.GetInt("BestScore");
+    }
+
+
+    public void ResetStat()
+    {
+        m_Score = GameManager.Instance.m_Score;
+        m_Life = GameManager.Instance.m_Life;
+        m_TimeChrono = 0;
     }
 
     void Awake()
@@ -107,6 +142,12 @@ public class HUDManager : MonoBehaviour
     {
         HUDManager.Instance.m_TimerText.text = h.ToString()+"h"+m.ToString()+"m"+s.ToString()+"s";
     }
+
+    public static void AddTime(double s)
+    {
+        HUDManager.Instance.m_TimeChrono = (int) s;
+    }
+
 
     public static IEnumerator PrintMessageForSecondes(string msg , float duree)
     {
